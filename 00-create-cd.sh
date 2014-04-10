@@ -49,6 +49,10 @@ apt-get -y install ros-hydro-rtmros-nextage
 apt-get -y install ros-hydro-rtmros-hironx
 apt-get -y install ros-hydro-denso
 apt-get -y install ros-hydro-common-tutorials
+apt-get -y install ros-hydro-turtlebot-viz
+apt-get -y install ros-hydro-turtlebot-simulator
+apt-get -y install ros-hydro-turtlebot-apps
+apt-get -y install ros-hydro-turtlebot
 
 # install emacs
 apt-get -y install emacs
