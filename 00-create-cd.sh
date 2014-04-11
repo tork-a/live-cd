@@ -54,6 +54,11 @@ apt-get -y install ros-hydro-turtlebot-simulator
 apt-get -y install ros-hydro-turtlebot-apps
 apt-get -y install ros-hydro-turtlebot
 
+# set ROS environment
+touch ~/.bashrc
+echo "source /opt/ros/hydro/setup.bash" >> ~/.bashrc
+source ~/.bashrc
+
 # install emacs
 apt-get -y install emacs
 
