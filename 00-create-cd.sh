@@ -96,6 +96,11 @@ apt-get -y install ros-$ROSDISTRO-turtlebot-apps
 apt-get -y install ros-$ROSDISTRO-turtlebot
 fi
 
+# set ROS environment
+touch ~/.bashrc
+echo "source /opt/ros/hydro/setup.bash" >> ~/.bashrc
+source ~/.bashrc
+
 # install emacs
 apt-get -y install emacs
 
