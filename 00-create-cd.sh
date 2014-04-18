@@ -2,6 +2,7 @@
 set -x
 set -e
 
+
 if [ $# -gt 0 ]; then ## if we have arguments, check functions
     DEBUG=TRUE
 fi
