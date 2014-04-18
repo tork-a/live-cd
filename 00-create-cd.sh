@@ -2,6 +2,13 @@
 set -x
 set -e
 
+whoami
+ps -aux
+ls -al
+groups jenkins
+apt-get -y install uck
+uck-remaster-clean
+
 if [ $# -gt 0 ]; then ## if we have arguments, check functions
     DEBUG=TRUE
 fi
@@ -10,7 +17,7 @@ fi
 if [ ! ${DEBUG} ]; then
     sudo uck-remaster-clean
     if [ ! -e ubuntu-12.04.4-desktop-amd64.iso ]; then
-        wget http://releases.ubuntu.com/12.04/ubuntu-12.04.4-desktop-amd64.iso
+        wget -q http://releases.ubuntu.com/12.04/ubuntu-12.04.4-desktop-amd64.iso
     fi
     sudo uck-remaster-unpack-iso ubuntu-12.04.4-desktop-amd64.iso
     sudo uck-remaster-unpack-rootfs
