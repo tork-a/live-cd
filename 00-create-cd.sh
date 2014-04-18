@@ -33,12 +33,13 @@ case $ROSDISTRO in
     indigo) ISO=ubuntu-14.04-desktop-amd64.iso;;
     *) echo "[ERROR] Unsupported ROSDISTRO $ROSDISTRO"; exit;;
 esac
+REV=`echo ${ISO} | sed "s/ubuntu-\([0-9]*.[0-9]*\).*/\\1/"`
 
 # init stuff
 if [ ! ${DEBUG} ]; then
     sudo uck-remaster-clean
     if [ ! -e ${ISO} ]; then
-        wget http://releases.ubuntu.com/`echo ${ISO} | sed "s/ubuntu-\([0-9]*.[0-9]*\).*/\\1/"`/${ISO}
+        wget http://releases.ubuntu.com/${REV}/${ISO}
     fi
     sudo uck-remaster-unpack-iso ${ISO}
     sudo uck-remaster-unpack-rootfs
@@ -150,8 +151,9 @@ if [ ! ${DEBUG} ]; then
     sudo uck-remaster-pack-rootfs
 
     # create iso
-    FILENAME=tork-ubuntu-ros-12.04-amd64-`date +%Y%m%d`.iso
-    sudo uck-remaster-pack-iso $FILENAME -g -d "TORK Ubuntu/ROS Linux"
+    DATE=`date +%Y%m%d`
+    FILENAME=tork-ubuntu-ros-${REV}-amd64-${DATE}.iso
+    sudo uck-remaster-pack-iso $FILENAME -g --description="TORK Ubuntu/ROS Linux (${DATE})"
     \cp -f ~/tmp/remaster-new-files/$FILENAME .
 fi
 
