@@ -2,17 +2,45 @@
 set -x
 set -e
 
-if [ $# -gt 0 ]; then ## if we have arguments, check functions
-    DEBUG=TRUE
+function usage {
+    set +x
+    echo >&2 "usage: $0"
+    echo >&2 "          [--help] print this message"
+    echo >&2 "          [--debug] debug mode "
+    echo >&2 "          [--rosdistro (hydro|indigo)] "
+    exit 0
+}
+
+OPT=`getopt -o hdr: -l help,debug,rosdistro: -- $*`
+if [ $? != 0 ]; then
+    usage
 fi
+
+ROSDISTRO=hydro
+eval set -- $OPT
+while [ -n "$1" ] ; do
+    echo $1
+    case $1 in
+        -h| --help) usage; shift;;
+        -d| --debug) DEBUG=TRUE; shift;;
+        -r| --rosdistro) ROSDISTRO=$2; shift 2;;
+        --) shift; break;;
+    esac
+done
+
+case $ROSDISTRO in
+    hydro ) ISO=ubuntu-12.04.4-desktop-amd64.iso;;
+    indigo) ISO=ubuntu-14.04-desktop-amd64.iso;;
+    *) echo "[ERROR] Unsupported ROSDISTRO $ROSDISTRO"; exit;;
+esac
 
 # init stuff
 if [ ! ${DEBUG} ]; then
     sudo uck-remaster-clean
-    if [ ! -e ubuntu-12.04.4-desktop-amd64.iso ]; then
-        wget http://releases.ubuntu.com/12.04/ubuntu-12.04.4-desktop-amd64.iso
+    if [ ! -e ${ISO} ]; then
+        wget http://releases.ubuntu.com/`echo ${ISO} | sed "s/ubuntu-\([0-9]*.[0-9]*\).*/\\1/"`/${ISO}
     fi
-    sudo uck-remaster-unpack-iso ubuntu-12.04.4-desktop-amd64.iso
+    sudo uck-remaster-unpack-iso ${ISO}
     sudo uck-remaster-unpack-rootfs
 fi
 
@@ -44,15 +72,18 @@ apt-get -y upgrade
 # install ros
 wget --no-check-certificat -O /tmp/jsk.rosbuild https://raw.github.com/jsk-ros-pkg/jsk_common/master/jsk.rosbuild
 chmod u+x /tmp/jsk.rosbuild
-/tmp/jsk.rosbuild hydro setup-ros
-apt-get -y install ros-hydro-rtmros-nextage
-apt-get -y install ros-hydro-rtmros-hironx
-apt-get -y install ros-hydro-denso
-apt-get -y install ros-hydro-common-tutorials
-apt-get -y install ros-hydro-turtlebot-viz
-apt-get -y install ros-hydro-turtlebot-simulator
-apt-get -y install ros-hydro-turtlebot-apps
-apt-get -y install ros-hydro-turtlebot
+/tmp/jsk.rosbuild $ROSDISTRO setup-ros
+
+if [ ${ROSDISTRO} == "hydro" ]; then
+apt-get -y install ros-$ROSDISTRO-rtmros-nextage
+apt-get -y install ros-$ROSDISTRO-rtmros-hironx
+apt-get -y install ros-$ROSDISTRO-denso
+apt-get -y install ros-$ROSDISTRO-common-tutorials
+apt-get -y install ros-$ROSDISTRO-turtlebot-viz
+apt-get -y install ros-$ROSDISTRO-turtlebot-simulator
+apt-get -y install ros-$ROSDISTRO-turtlebot-apps
+apt-get -y install ros-$ROSDISTRO-turtlebot
+fi
 
 # install emacs
 apt-get -y install emacs
@@ -64,7 +95,9 @@ apt-get -y install chromium-browser
 apt-get -y install libgnome2.0
 
 # for japanese environment
+if [ ${ROSDISTRO} == "hydro" ]; then
 apt-get -y install language-pack-gnome-ja latex-cjk-japanese xfonts-intl-japanese
+fi
 
 fi # ( [ ! ${DEBUG} ] )
 
