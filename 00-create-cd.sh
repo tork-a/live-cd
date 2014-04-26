@@ -109,12 +109,48 @@ favorites=\`gsettings get com.canonical.Unity.Launcher favorites\`
 ## recompile schemas file
 glib-compile-schemas /usr/share/glib-2.0/schemas/
 
+## http://wiki.backbox.org/index.php/Customize_the_Live_DVD
+# Some of the services might restart while updating. We recommend to stop them in order to make a fast booting ISO.
+
+service apache2 stop
+service tor stop
+service polipo stop
+service greenbone-security-assistant stop
+service openvas-administrator stop
+service openvas-manager stop
+service openvas-scanner stop
+update-rc.d -f apache2 remove
+update-rc.d -f tor remove
+update-rc.d -f polipo remove
+update-rc.d -f greenbone-security-assistant remove
+update-rc.d -f openvas-administrator remove
+update-rc.d -f openvas-manager remove
+update-rc.d -f openvas-scanner remove
+
+# Now you can update or remove packages, customize everything you want.. Before closing the ISO, it would be best to remove any temporary files which are no longer needed
+
+apt-get clean
+rm -f /etc/apt/*.save
+rm -f /etc/apt/sources.list.d/*.save
+rm -f /var/crash/*
+rm -rf /tmp/* ~/.bash_history
+rm /etc/hosts
+rm /etc/resolv.conf
+rm /var/lib/dbus/machine-id
+
+# Now you can make a new initramfs image and exit:
+
+update-initramfs -u
 
 EOF
 
 if [ ! ${DEBUG} ]; then
-     # pack file system
-    sudo uck-remaster-pack-rootfs
+    sudo rm -f ~/tmp/remaster-iso/casper/initrd.lz
+    sudo cp ~/tmp/remaster-root/boot/initrd.img-*  ~/tmp/remaster-iso/casper/initrd.gz
+    sudo cp ~/tmp/remaster-root/boot/vmlinuz-*  ~/tmp/remaster-iso/casper/vmlinuz
+
+    # pack file system
+    sudo uck-remaster-pack-rootfs -c
 
     # create iso
     FILENAME=tork-ubuntu-ros-12.04-amd64-`date +%Y%m%d`.iso
