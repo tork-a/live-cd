@@ -8,6 +8,7 @@ fi
 
 # init stuff
 if [ ! ${DEBUG} ]; then
+    rm -fr ~/tmp/remaster-new-files/
     sudo uck-remaster-clean
     if [ ! -e ubuntu-12.04.4-desktop-amd64.iso ]; then
         wget http://releases.ubuntu.com/12.04/ubuntu-12.04.4-desktop-amd64.iso
