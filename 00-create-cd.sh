@@ -37,7 +37,7 @@ REV=`echo ${ISO} | sed "s/ubuntu-\([0-9]*.[0-9]*\).*/\\1/"`
 
 # init stuff
 if [ ! ${DEBUG} ]; then
-    rm -fr ~/tmp/remaster-new-files/
+    sudo rm -fr ~/tmp/remaster-new-files/
     sudo uck-remaster-clean
     if [ ! -e ${ISO} ]; then
         wget http://releases.ubuntu.com/${REV}/${ISO}
@@ -147,20 +147,20 @@ glib-compile-schemas /usr/share/glib-2.0/schemas/
 ## http://wiki.backbox.org/index.php/Customize_the_Live_DVD
 # Some of the services might restart while updating. We recommend to stop them in order to make a fast booting ISO.
 
-service apache2 stop
-service tor stop
-service polipo stop
-service greenbone-security-assistant stop
-service openvas-administrator stop
-service openvas-manager stop
-service openvas-scanner stop
-update-rc.d -f apache2 remove
-update-rc.d -f tor remove
-update-rc.d -f polipo remove
-update-rc.d -f greenbone-security-assistant remove
-update-rc.d -f openvas-administrator remove
-update-rc.d -f openvas-manager remove
-update-rc.d -f openvas-scanner remove
+# service apache2 stop
+# service tor stop
+# service polipo stop
+# service greenbone-security-assistant stop
+# service openvas-administrator stop
+# service openvas-manager stop
+# service openvas-scanner stop
+# update-rc.d -f apache2 remove
+# update-rc.d -f tor remove
+# update-rc.d -f polipo remove
+# update-rc.d -f greenbone-security-assistant remove
+# update-rc.d -f openvas-administrator remove
+# update-rc.d -f openvas-manager remove
+# update-rc.d -f openvas-scanner remove
 
 # Now you can update or remove packages, customize everything you want.. Before closing the ISO, it would be best to remove any temporary files which are no longer needed
 
@@ -173,17 +173,9 @@ rm /etc/hosts
 rm /etc/resolv.conf
 rm /var/lib/dbus/machine-id
 
-# Now you can make a new initramfs image and exit:
-
-update-initramfs -u
-
 EOF
 
 if [ ! ${DEBUG} ]; then
-    sudo rm -f ~/tmp/remaster-iso/casper/initrd.lz
-    sudo cp ~/tmp/remaster-root/boot/initrd.img-*  ~/tmp/remaster-iso/casper/initrd.gz
-    sudo cp ~/tmp/remaster-root/boot/vmlinuz-*  ~/tmp/remaster-iso/casper/vmlinuz
-
     # pack file system
     sudo uck-remaster-pack-rootfs -c
 
