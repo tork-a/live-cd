@@ -121,6 +121,8 @@ echo "
 [org.gnome.desktop.background]
 picture-uri='file:///home/ubuntu/tork-ros.png'
 " > /usr/share/glib-2.0/schemas/10_local-desktop-background.gschema.override
+# above does not work with 14.04
+dbus-launch --exit-with-session gsettings set org.gnome.desktop.background picture-uri file:///home/ubuntu/tork-ros.png
 
 # setup keyboard
 # dbus-launch --exit-with-session gsettings set org.gnome.libgnomekbd.keyboard options "['ctrl\tctrl:swapcaps']"
