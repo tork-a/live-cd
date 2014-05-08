@@ -26,13 +26,13 @@ whoami
 if [ \`grep universe /etc/apt/sources.list | wc -l\` -eq 0 ]; then
   echo "
 #
-deb http://archive.ubuntu.com/ubuntu/ precise main universe
-deb http://security.ubuntu.com/ubuntu/ precise-security main universe
-deb http://archive.ubuntu.com/ubuntu/ precise-updates main universe
+deb http://archive.ubuntu.com/ubuntu/ \`lsb_release -cs\` main universe
+deb http://security.ubuntu.com/ubuntu/ \`lsb_release -cs\`-security main universe
+deb http://archive.ubuntu.com/ubuntu/ \`lsb_release -cs\`-updates main universe
 #
-deb http://archive.ubuntu.com/ubuntu/ precise main multiverse
-deb http://security.ubuntu.com/ubuntu/ precise-security main multiverse
-deb http://archive.ubuntu.com/ubuntu/ precise-updates main multiverse
+deb http://archive.ubuntu.com/ubuntu/ \`lsb_release -cs\` main multiverse
+deb http://security.ubuntu.com/ubuntu/ \`lsb_release -cs\`-security main multiverse
+deb http://archive.ubuntu.com/ubuntu/ \`lsb_release -cs\`-updates main multiverse
 " >> /etc/apt/sources.list;
 fi
 cat /etc/apt/sources.list
