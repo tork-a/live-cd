@@ -2,17 +2,46 @@
 set -x
 set -e
 
-if [ $# -gt 0 ]; then ## if we have arguments, check functions
-    DEBUG=TRUE
+function usage {
+    set +x
+    echo >&2 "usage: $0"
+    echo >&2 "          [--help] print this message"
+    echo >&2 "          [--debug] debug mode "
+    echo >&2 "          [--rosdistro (hydro|indigo)] "
+    exit 0
+}
+
+OPT=`getopt -o hdr: -l help,debug,rosdistro: -- $*`
+if [ $? != 0 ]; then
+    usage
 fi
+
+ROSDISTRO=hydro
+eval set -- $OPT
+while [ -n "$1" ] ; do
+    echo $1
+    case $1 in
+        -h| --help) usage; shift;;
+        -d| --debug) DEBUG=TRUE; shift;;
+        -r| --rosdistro) ROSDISTRO=$2; shift 2;;
+        --) shift; break;;
+    esac
+done
+
+case $ROSDISTRO in
+    hydro ) ISO=ubuntu-12.04.4-desktop-amd64.iso;;
+    indigo) ISO=ubuntu-14.04-desktop-amd64.iso;;
+    *) echo "[ERROR] Unsupported ROSDISTRO $ROSDISTRO"; exit;;
+esac
+REV=`echo ${ISO} | sed "s/ubuntu-\([0-9]*.[0-9]*\).*/\\1/"`
 
 # init stuff
 if [ ! ${DEBUG} ]; then
     sudo uck-remaster-clean
-    if [ ! -e ubuntu-12.04.4-desktop-amd64.iso ]; then
-        wget http://releases.ubuntu.com/12.04/ubuntu-12.04.4-desktop-amd64.iso
+    if [ ! -e ${ISO} ]; then
+        wget http://releases.ubuntu.com/${REV}/${ISO}
     fi
-    sudo uck-remaster-unpack-iso ubuntu-12.04.4-desktop-amd64.iso
+    sudo uck-remaster-unpack-iso ${ISO}
     sudo uck-remaster-unpack-rootfs
 fi
 
@@ -26,13 +55,13 @@ whoami
 if [ \`grep universe /etc/apt/sources.list | wc -l\` -eq 0 ]; then
   echo "
 #
-deb http://archive.ubuntu.com/ubuntu/ precise main universe
-deb http://security.ubuntu.com/ubuntu/ precise-security main universe
-deb http://archive.ubuntu.com/ubuntu/ precise-updates main universe
+deb http://archive.ubuntu.com/ubuntu/ \`lsb_release -cs\` main universe
+deb http://security.ubuntu.com/ubuntu/ \`lsb_release -cs\`-security main universe
+deb http://archive.ubuntu.com/ubuntu/ \`lsb_release -cs\`-updates main universe
 #
-deb http://archive.ubuntu.com/ubuntu/ precise main multiverse
-deb http://security.ubuntu.com/ubuntu/ precise-security main multiverse
-deb http://archive.ubuntu.com/ubuntu/ precise-updates main multiverse
+deb http://archive.ubuntu.com/ubuntu/ \`lsb_release -cs\` main multiverse
+deb http://security.ubuntu.com/ubuntu/ \`lsb_release -cs\`-security main multiverse
+deb http://archive.ubuntu.com/ubuntu/ \`lsb_release -cs\`-updates main multiverse
 " >> /etc/apt/sources.list;
 fi
 cat /etc/apt/sources.list
@@ -44,15 +73,18 @@ apt-get -y upgrade
 # install ros
 wget --no-check-certificat -O /tmp/jsk.rosbuild https://raw.github.com/jsk-ros-pkg/jsk_common/master/jsk.rosbuild
 chmod u+x /tmp/jsk.rosbuild
-/tmp/jsk.rosbuild hydro setup-ros
-apt-get -y install ros-hydro-rtmros-nextage
-apt-get -y install ros-hydro-rtmros-hironx
-apt-get -y install ros-hydro-denso
-apt-get -y install ros-hydro-common-tutorials
-apt-get -y install ros-hydro-turtlebot-viz
-apt-get -y install ros-hydro-turtlebot-simulator
-apt-get -y install ros-hydro-turtlebot-apps
-apt-get -y install ros-hydro-turtlebot
+/tmp/jsk.rosbuild $ROSDISTRO setup-ros
+
+if [ ${ROSDISTRO} == "hydro" ]; then
+apt-get -y install ros-$ROSDISTRO-rtmros-nextage
+apt-get -y install ros-$ROSDISTRO-rtmros-hironx
+apt-get -y install ros-$ROSDISTRO-denso
+apt-get -y install ros-$ROSDISTRO-common-tutorials
+apt-get -y install ros-$ROSDISTRO-turtlebot-viz
+apt-get -y install ros-$ROSDISTRO-turtlebot-simulator
+apt-get -y install ros-$ROSDISTRO-turtlebot-apps
+apt-get -y install ros-$ROSDISTRO-turtlebot
+fi
 
 # install emacs
 apt-get -y install emacs
@@ -64,7 +96,9 @@ apt-get -y install chromium-browser
 apt-get -y install libgnome2.0
 
 # for japanese environment
+if [ ${ROSDISTRO} == "hydro" ]; then
 apt-get -y install language-pack-gnome-ja latex-cjk-japanese xfonts-intl-japanese
+fi
 
 fi # ( [ ! ${DEBUG} ] )
 
@@ -117,8 +151,9 @@ if [ ! ${DEBUG} ]; then
     sudo uck-remaster-pack-rootfs
 
     # create iso
-    FILENAME=tork-ubuntu-ros-12.04-amd64-`date +%Y%m%d`.iso
-    sudo uck-remaster-pack-iso $FILENAME -g -d "TORK Ubuntu/ROS Linux"
+    DATE=`date +%Y%m%d`
+    FILENAME=tork-ubuntu-ros-${REV}-amd64-${DATE}.iso
+    sudo uck-remaster-pack-iso $FILENAME -g --description="TORK Ubuntu/ROS Linux (${DATE})"
     \cp -f ~/tmp/remaster-new-files/$FILENAME .
 fi
 
