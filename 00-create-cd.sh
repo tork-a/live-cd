@@ -38,10 +38,10 @@ REV=`echo ${ISO} | sed "s/ubuntu-\([0-9]*.[0-9]*\).*/\\1/"`
 # init stuff
 if [ ! ${DEBUG} ]; then
     sudo uck-remaster-clean
-    if [ ! -e ${ISO} ]; then
-        wget http://releases.ubuntu.com/${REV}/${ISO}
+    if [ ! -e /tmp/${ISO} ]; then
+        wget -q http://releases.ubuntu.com/${REV}/${ISO} -O /tmp/${ISO}
     fi
-    sudo uck-remaster-unpack-iso ${ISO}
+    sudo uck-remaster-unpack-iso /tmp/${ISO}
     sudo uck-remaster-unpack-rootfs
 fi
 
