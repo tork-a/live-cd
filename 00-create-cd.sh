@@ -38,10 +38,10 @@ REV=`echo ${ISO} | sed "s/ubuntu-\([0-9]*.[0-9]*\).*/\\1/"`
 # init stuff
 if [ ! ${DEBUG} ]; then
     sudo uck-remaster-clean
-    if [ ! -e ${ISO} ]; then
-        wget http://releases.ubuntu.com/${REV}/${ISO}
+    if [ ! -e /tmp/${ISO} ]; then
+        wget -q http://releases.ubuntu.com/${REV}/${ISO} -O /tmp/${ISO}
     fi
-    sudo uck-remaster-unpack-iso ${ISO}
+    sudo uck-remaster-unpack-iso /tmp/${ISO}
     sudo uck-remaster-unpack-rootfs
 fi
 
@@ -67,8 +67,11 @@ fi
 cat /etc/apt/sources.list
 
 # omajinai
+if [ ${ROSDISTRO} == "indigo" ]; then
+  touch /etc/init.d/systemd-logind
+fi
 apt-get update
-apt-get -y upgrade
+apt-get -y upgrade || apt-get -y -f install || apt-get -y upgrade
 
 # install ros
 wget --no-check-certificat -O /tmp/jsk.rosbuild https://raw.github.com/jsk-ros-pkg/jsk_common/master/jsk.rosbuild
