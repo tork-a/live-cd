@@ -29,7 +29,7 @@ while [ -n "$1" ] ; do
 done
 
 case $ROSDISTRO in
-    hydro ) ISO=ubuntu-12.04.4-desktop-amd64.iso;;
+    hydro ) ISO=ubuntu-12.04.4-dvd-amd64.iso;;
     indigo) ISO=ubuntu-14.04-desktop-amd64.iso;;
     *) echo "[ERROR] Unsupported ROSDISTRO $ROSDISTRO"; exit;;
 esac
@@ -87,6 +87,9 @@ apt-get -y install ros-$ROSDISTRO-turtlebot-viz
 apt-get -y install ros-$ROSDISTRO-turtlebot-simulator
 apt-get -y install ros-$ROSDISTRO-turtlebot-apps
 apt-get -y install ros-$ROSDISTRO-turtlebot
+apt-get -y install ros-$ROSDISTRO-desktop-full
+apt-get -y install ros-$ROSDISTRO-dynamixel-motor
+apt-get -y install git
 fi
 
 # install emacs
@@ -110,6 +113,7 @@ mkdir -p /home/ubuntu/catkin_ws/src
 cd /home/ubuntu/catkin_ws/src
 wstool init || echo "already initilized"
 wstool set roscpp_tutorials https://github.com/ros/ros_tutorials.git --git -y || echo "already configured"
+wstool set leap_motion https://github.com/warp1337/rosleapmotion.git --git -y || echo "already configured"
 wstool update
 cd -
 chown -R 999.999 /home/ubuntu
