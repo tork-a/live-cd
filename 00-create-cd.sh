@@ -89,6 +89,7 @@ apt-get -y install ros-$ROSDISTRO-turtlebot-apps
 apt-get -y install ros-$ROSDISTRO-turtlebot
 apt-get -y install ros-$ROSDISTRO-dynamixel-motor
 apt-get -y install git
+apt-get -y install libgl1-mesa-dri libgl1-mesa-glx
 fi
 
 # install emacs
