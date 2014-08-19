@@ -79,9 +79,16 @@ chmod u+x /tmp/jsk.rosbuild
 /tmp/jsk.rosbuild $ROSDISTRO setup-ros
 
 if [ ${ROSDISTRO} == "hydro" ]; then
+# For ROS
+apt-get -y install ntp
+# RTM, Hiro-NXO
 apt-get -y install ros-$ROSDISTRO-rtmros-nextage
 apt-get -y install ros-$ROSDISTRO-rtmros-hironx
+apt-get -y install ros-$ROSDISTRO-rtshell-core 
+apt-get -y install ros-$ROSDISTRO-hironx-tutorial
+# For Denso
 apt-get -y install ros-$ROSDISTRO-denso
+# For seminar
 apt-get -y install ros-$ROSDISTRO-common-tutorials
 apt-get -y install ros-$ROSDISTRO-turtlebot-viz
 apt-get -y install ros-$ROSDISTRO-turtlebot-simulator
