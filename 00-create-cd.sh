@@ -154,6 +154,13 @@ favorites=\`gsettings get com.canonical.Unity.Launcher favorites\`
 glib-compile-schemas /usr/share/glib-2.0/schemas/
 
 
+## write test code
+if [ ! -e /home/ubuntu/.live-cd-test.sh ]; then
+  echo "`cat dot-live-cd-test.sh`" >> /home/ubuntu/.live-cd-test.sh
+  chown -R 999.999 /home/ubuntu/.live-cd-test.sh
+  chmod a+x /home/ubuntu/.live-cd-test.sh
+fi
+
 EOF
 
 if [ ! ${DEBUG} ]; then
@@ -164,7 +171,8 @@ if [ ! ${DEBUG} ]; then
     DATE=`date +%Y%m%d`
     FILENAME=tork-ubuntu-ros-${REV}-amd64-${DATE}.iso
     sudo uck-remaster-pack-iso $FILENAME -g --description="TORK Ubuntu/ROS Linux (${DATE})"
-    \cp -f ~/tmp/remaster-new-files/$FILENAME .
+    sudo cp -f ~/tmp/remaster-new-files/$FILENAME .
+    sudo chown jenkins.jenkins $FILENAME
 fi
 
 
