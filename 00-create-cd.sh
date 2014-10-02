@@ -110,6 +110,9 @@ if [ ${ROSDISTRO} == "hydro" ]; then
 apt-get -y install language-pack-gnome-ja latex-cjk-japanese xfonts-intl-japanese
 fi
 
+# fix resolve conf (https://github.com/tork-a/live-cd/issues/8)
+ln -sf ../run/resolvconf/resolv.conf /etc/resolv.conf
+
 fi # ( [ ! ${DEBUG} ] )
 
 # setup catkin
