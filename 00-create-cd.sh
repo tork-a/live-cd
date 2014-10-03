@@ -127,7 +127,11 @@ chown -R 999.999 /home/ubuntu
 # desktop settings
 if [ ! -e /home/ubuntu/tork-ros.png ]; then
   wget https://github.com/tork-a/live-cd/raw/master/tork-ros.png -O /home/ubuntu/tork-ros.png
+  chown -R 999.999 /home/ubuntu/tork-ros.png
 fi
+
+if [ ${ROSDISTRO} == "hydro" ]; then
+
 ## dbus-launch --exit-with-session gsettings set org.gnome.desktop.background picture-uri file:///home/ubuntu/tork-ros.png
 echo "
 [org.gnome.desktop.background]
@@ -156,6 +160,7 @@ favorites=\`gsettings get com.canonical.Unity.Launcher favorites\`
 ## recompile schemas file
 glib-compile-schemas /usr/share/glib-2.0/schemas/
 
+fi
 
 ## write test code
 if [ ! -e /home/ubuntu/.live-cd-test.sh ]; then
