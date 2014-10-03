@@ -50,6 +50,9 @@ cat <<EOF | sudo uck-remaster-chroot-rootfs
 set -x
 set -e
 
+umask
+umask 0002
+
 if [ ! ${DEBUG} ]; then
 whoami
 if [ \`grep universe /etc/apt/sources.list | wc -l\` -eq 0 ]; then
@@ -68,7 +71,7 @@ cat /etc/apt/sources.list
 
 # omajinai
 if [ ${ROSDISTRO} == "indigo" ]; then
-  touch /etc/init.d/systemd-logind
+#  touch /etc/init.d/systemd-logind
 fi
 apt-get update
 apt-get -y upgrade || apt-get -y -f install || apt-get -y upgrade
