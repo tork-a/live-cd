@@ -70,9 +70,9 @@ fi
 cat /etc/apt/sources.list
 
 # omajinai
-if [ ${ROSDISTRO} == "indigo" ]; then
+#if [ ${ROSDISTRO} == "indigo" ]; then
 #  touch /etc/init.d/systemd-logind
-fi
+#fi
 apt-get update
 apt-get -y upgrade || apt-get -y -f install || apt-get -y upgrade
 
