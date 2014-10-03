@@ -47,6 +47,10 @@ echo "sendkey tab">&3;   sleep 2
 echo "sendkey ret">&3;   sleep 2
 sleep 30
 
+echo "screendump desktop.ppm">&3;   sleep 2
+convert desktop.ppm desktop.png
+chmod a+rw desktop.ppm desktop.png
+
 echo "sendkey s">&3;   sleep 1
 echo "sendkey u">&3;   sleep 1
 echo "sendkey d">&3;   sleep 1
