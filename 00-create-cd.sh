@@ -69,12 +69,13 @@ deb http://archive.ubuntu.com/ubuntu/ \`lsb_release -cs\`-updates main multivers
 fi
 cat /etc/apt/sources.list
 
-# omajinai
-#if [ ${ROSDISTRO} == "indigo" ]; then
-#  touch /etc/init.d/systemd-logind
-#fi
 apt-get update
 apt-get -y upgrade || apt-get -y -f install || apt-get -y upgrade
+
+# omajinai
+if [ ${ROSDISTRO} == "indigo" ]; then
+  apt-get install libpam-systemd
+fi
 
 # install ros
 wget --no-check-certificat -O /tmp/jsk.rosbuild https://raw.github.com/jsk-ros-pkg/jsk_common/master/jsk.rosbuild
