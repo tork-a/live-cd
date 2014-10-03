@@ -30,7 +30,7 @@ done
 
 case $ROSDISTRO in
     hydro ) ISO=ubuntu-12.04.4-desktop-amd64.iso;;
-    indigo) ISO=ubuntu-14.04-desktop-amd64.iso;;
+    indigo) ISO=ubuntu-14.04.1-desktop-amd64.iso;;
     *) echo "[ERROR] Unsupported ROSDISTRO $ROSDISTRO"; exit;;
 esac
 REV=`echo ${ISO} | sed "s/ubuntu-\([0-9]*.[0-9]*\).*/\\1/"`
@@ -39,10 +39,10 @@ REV=`echo ${ISO} | sed "s/ubuntu-\([0-9]*.[0-9]*\).*/\\1/"`
 if [ ! ${DEBUG} ]; then
     sudo rm -fr ~/tmp/remaster-new-files/
     sudo uck-remaster-clean
-    if [ ! -e ${ISO} ]; then
-        wget http://releases.ubuntu.com/${REV}/${ISO}
+    if [ ! -e /tmp/${ISO} ]; then
+        wget -q http://releases.ubuntu.com/${REV}/${ISO} -O /tmp/${ISO}
     fi
-    sudo uck-remaster-unpack-iso ${ISO}
+    sudo uck-remaster-unpack-iso /tmp/${ISO}
     sudo uck-remaster-unpack-rootfs
 fi
 
@@ -56,20 +56,23 @@ whoami
 if [ \`grep universe /etc/apt/sources.list | wc -l\` -eq 0 ]; then
   echo "
 #
-deb http://archive.ubuntu.com/ubuntu/ precise main universe
-deb http://security.ubuntu.com/ubuntu/ precise-security main universe
-deb http://archive.ubuntu.com/ubuntu/ precise-updates main universe
+deb http://archive.ubuntu.com/ubuntu/ \`lsb_release -cs\` main universe
+deb http://security.ubuntu.com/ubuntu/ \`lsb_release -cs\`-security main universe
+deb http://archive.ubuntu.com/ubuntu/ \`lsb_release -cs\`-updates main universe
 #
-deb http://archive.ubuntu.com/ubuntu/ precise main multiverse
-deb http://security.ubuntu.com/ubuntu/ precise-security main multiverse
-deb http://archive.ubuntu.com/ubuntu/ precise-updates main multiverse
+deb http://archive.ubuntu.com/ubuntu/ \`lsb_release -cs\` main multiverse
+deb http://security.ubuntu.com/ubuntu/ \`lsb_release -cs\`-security main multiverse
+deb http://archive.ubuntu.com/ubuntu/ \`lsb_release -cs\`-updates main multiverse
 " >> /etc/apt/sources.list;
 fi
 cat /etc/apt/sources.list
 
 # omajinai
+if [ ${ROSDISTRO} == "indigo" ]; then
+  touch /etc/init.d/systemd-logind
+fi
 apt-get update
-apt-get -y upgrade
+apt-get -y upgrade || apt-get -y -f install || apt-get -y upgrade
 
 # install ros
 wget --no-check-certificat -O /tmp/jsk.rosbuild https://raw.github.com/jsk-ros-pkg/jsk_common/master/jsk.rosbuild
@@ -77,9 +80,16 @@ chmod u+x /tmp/jsk.rosbuild
 /tmp/jsk.rosbuild $ROSDISTRO setup-ros
 
 if [ ${ROSDISTRO} == "hydro" ]; then
+# For ROS
+apt-get -y install ntp
+# RTM, Hiro-NXO
 apt-get -y install ros-$ROSDISTRO-rtmros-nextage
 apt-get -y install ros-$ROSDISTRO-rtmros-hironx
+apt-get -y install ros-$ROSDISTRO-rtshell-core 
+apt-get -y install ros-$ROSDISTRO-hironx-tutorial
+# For Denso
 apt-get -y install ros-$ROSDISTRO-denso
+# For seminar
 apt-get -y install ros-$ROSDISTRO-common-tutorials
 apt-get -y install ros-$ROSDISTRO-turtlebot-viz
 apt-get -y install ros-$ROSDISTRO-turtlebot-simulator
@@ -100,6 +110,9 @@ apt-get -y install libgnome2.0
 if [ ${ROSDISTRO} == "hydro" ]; then
 apt-get -y install language-pack-gnome-ja latex-cjk-japanese xfonts-intl-japanese
 fi
+
+# fix resolve conf (https://github.com/tork-a/live-cd/issues/8)
+ln -sf ../run/resolvconf/resolv.conf /etc/resolv.conf
 
 fi # ( [ ! ${DEBUG} ] )
 
@@ -175,6 +188,13 @@ rm /etc/hosts
 rm /etc/resolv.conf
 rm /var/lib/dbus/machine-id
 
+## write test code
+if [ ! -e /home/ubuntu/.live-cd-test.sh ]; then
+  echo "`cat dot-live-cd-test.sh`" >> /home/ubuntu/.live-cd-test.sh
+  chown -R 999.999 /home/ubuntu/.live-cd-test.sh
+  chmod a+x /home/ubuntu/.live-cd-test.sh
+fi
+
 EOF
 
 if [ ! ${DEBUG} ]; then
@@ -185,7 +205,8 @@ if [ ! ${DEBUG} ]; then
     DATE=`date +%Y%m%d`
     FILENAME=tork-ubuntu-ros-${REV}-amd64-${DATE}.iso
     sudo uck-remaster-pack-iso $FILENAME -g --description="TORK Ubuntu/ROS Linux (${DATE})"
-    \cp -f ~/tmp/remaster-new-files/$FILENAME .
+    sudo cp -f ~/tmp/remaster-new-files/$FILENAME .
+    sudo chown jenkins.jenkins $FILENAME
 fi
 
 
