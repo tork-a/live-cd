@@ -156,6 +156,10 @@ favorites=\`gsettings get com.canonical.Unity.Launcher favorites\`
 ## recompile schemas file
 glib-compile-schemas /usr/share/glib-2.0/schemas/
 
+# set ROS environment
+touch ~/.bashrc
+echo "source /opt/ros/hydro/setup.bash" >> ~/.bashrc
+source ~/.bashrc
 
 ## write test code
 if [ ! -e /home/ubuntu/.live-cd-test.sh ]; then
