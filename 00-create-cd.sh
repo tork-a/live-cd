@@ -130,8 +130,6 @@ if [ ! -e /home/ubuntu/tork-ros.png ]; then
   chown -R 999.999 /home/ubuntu/tork-ros.png
 fi
 
-if [ ${ROSDISTRO} == "hydro" ]; then
-
 ## dbus-launch --exit-with-session gsettings set org.gnome.desktop.background picture-uri file:///home/ubuntu/tork-ros.png
 echo "
 [org.gnome.desktop.background]
@@ -145,6 +143,8 @@ echo "
 options=['ctrl\tctrl:nocaps']
 " > /usr/share/glib-2.0/schemas/10_local-libgnomekbd-keyboard.gschema.override
 
+if [ ${ROSDISTRO} == "hydro" ]; then
+
 # add gnome-terminal icon
 dbus-launch --exit-with-session gsettings set com.canonical.Unity.Launcher favorites "\$(gsettings get com.canonical.Unity.Launcher favorites | sed "s/, *'gnome-terminal.desktop' *//g" | sed "s/'gnome-terminal.desktop' *, *//g" | sed -e "s/]$/, 'gnome-terminal.desktop']/")"
 gsettings get com.canonical.Unity.Launcher favorites
@@ -152,6 +152,7 @@ gsettings get com.canonical.Unity.Launcher favorites
 # add chromium-browser.desktop
 dbus-launch --exit-with-session gsettings set com.canonical.Unity.Launcher favorites "\$(gsettings get com.canonical.Unity.Launcher favorites | sed "s/, *'chromium-browser.desktop' *//g" | sed "s/'chromium-browser.desktop' *, *//g" | sed -e "s/]$/, 'chromium-browser.desktop']/")"
 
+fi
 echo "
 [com.canonical.Unity.Launcher]
 favorites=\`gsettings get com.canonical.Unity.Launcher favorites\`
@@ -160,7 +161,6 @@ favorites=\`gsettings get com.canonical.Unity.Launcher favorites\`
 ## recompile schemas file
 glib-compile-schemas /usr/share/glib-2.0/schemas/
 
-fi
 
 ## write test code
 if [ ! -e /home/ubuntu/.live-cd-test.sh ]; then
