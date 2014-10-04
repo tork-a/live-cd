@@ -70,6 +70,7 @@ fi
 cat /etc/apt/sources.list
 
 apt-get update
+apt-get -f -y install
 
 # install ros
 wget --no-check-certificat -O /tmp/jsk.rosbuild https://raw.github.com/jsk-ros-pkg/jsk_common/master/jsk.rosbuild
