@@ -50,7 +50,7 @@ cat <<EOF | sudo uck-remaster-chroot-rootfs
 set -x
 set -e
 
-umask 0002
+umask 022
 
 if [ ! ${DEBUG} ]; then
 whoami
@@ -76,6 +76,8 @@ apt-get -y install ros-$ROSDISTRO-desktop-full python-wstool
 rosdep init
 #su 999 -c 'rosdep update'
 cat /etc/passwd
+umask
+ls -al /etc/apt/sources.list.d/ros-latest.list
 
 if [ ${ROSDISTRO} == "hydro" ]; then
 # For ROS
