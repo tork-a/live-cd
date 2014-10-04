@@ -69,10 +69,10 @@ fi
 cat /etc/apt/sources.list
 
 # install ros
-sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu `lsb_release -cs` main" > /etc/apt/sources.list.d/ros-latest.list'
+sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu \`lsb_release -cs\` main" > /etc/apt/sources.list.d/ros-latest.list'
 wget http://packages.ros.org/ros.key -O - | sudo apt-key add -
 apt-get update
-apt-get -y install ros-$ROSDISTRO-desktop
+apt-get -y install ros-$ROSDISTRO-desktop-full
 rosdep init
 #su 999 -c 'rosdep update'
 cat /etc/passwd
