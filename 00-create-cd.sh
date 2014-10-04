@@ -50,7 +50,6 @@ cat <<EOF | sudo uck-remaster-chroot-rootfs
 set -x
 set -e
 
-umask
 umask 0002
 
 if [ ! ${DEBUG} ]; then
@@ -69,13 +68,13 @@ deb http://archive.ubuntu.com/ubuntu/ \`lsb_release -cs\`-updates main multivers
 fi
 cat /etc/apt/sources.list
 
-apt-get update
-apt-get -f -y install
-
 # install ros
-wget --no-check-certificat -O /tmp/jsk.rosbuild https://raw.github.com/jsk-ros-pkg/jsk_common/master/jsk.rosbuild
-chmod u+x /tmp/jsk.rosbuild
-/tmp/jsk.rosbuild $ROSDISTRO setup-ros
+sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu `lsb_release -cs` main" > /etc/apt/sources.list.d/ros-latest.list'
+wget http://packages.ros.org/ros.key -O - | sudo apt-key add -
+apt-get update
+apt-get -y install ros-hydro-$ROSDISTRO-full
+rosdep init
+su 999 -c 'rosdep update'
 
 if [ ${ROSDISTRO} == "hydro" ]; then
 # For ROS
