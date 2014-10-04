@@ -74,7 +74,8 @@ wget http://packages.ros.org/ros.key -O - | sudo apt-key add -
 apt-get update
 apt-get -y install ros-$ROSDISTRO-desktop-full
 rosdep init
-su 999 -c 'rosdep update'
+#su 999 -c 'rosdep update'
+cat /etc/passwd
 
 if [ ${ROSDISTRO} == "hydro" ]; then
 # For ROS
