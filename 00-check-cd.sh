@@ -37,6 +37,14 @@ sleep 10
 echo "sendkey ctrl-alt-t">&3
 sleep 10
 
+echo "sendkey l">&3;   sleep 2
+echo "sendkey s">&3; sleep 2
+echo "sendkey spc">&3;   sleep 2
+echo "sendkey minus">&3;     sleep 2
+echo "sendkey a">&3;     sleep 2
+echo "sendkey l">&3;     sleep 2
+sleep 10
+
 echo "sendkey dot">&3;   sleep 2
 echo "sendkey slash">&3; sleep 2
 echo "sendkey dot">&3;   sleep 2
