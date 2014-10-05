@@ -68,17 +68,12 @@ deb http://archive.ubuntu.com/ubuntu/ \`lsb_release -cs\`-updates main multivers
 fi
 cat /etc/apt/sources.list
 
-# omajinai
-if [ ${ROSDISTRO} == "indigo" ]; then
-  touch /etc/init.d/systemd-logind
-fi
-apt-get update
-apt-get -y upgrade || apt-get -y -f install || apt-get -y upgrade
-
 # install ros
-wget --no-check-certificat -O /tmp/jsk.rosbuild https://raw.github.com/jsk-ros-pkg/jsk_common/master/jsk.rosbuild
-chmod u+x /tmp/jsk.rosbuild
-/tmp/jsk.rosbuild $ROSDISTRO setup-ros
+sh -c 'echo "deb http://packages.ros.org/ros/ubuntu \`lsb_release -cs\` main" > /etc/apt/sources.list.d/ros-latest.list'
+wget http://packages.ros.org/ros.key -O - | apt-key add -
+apt-get update
+apt-get -y install ros-$ROSDISTRO-desktop-full python-wstool
+rosdep init
 
 if [ ${ROSDISTRO} == "hydro" ]; then
 # For ROS
