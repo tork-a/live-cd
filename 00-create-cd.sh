@@ -72,7 +72,9 @@ cat /etc/apt/sources.list
 sh -c 'echo "deb http://packages.ros.org/ros/ubuntu \`lsb_release -cs\` main" > /etc/apt/sources.list.d/ros-latest.list'
 wget http://packages.ros.org/ros.key -O - | apt-key add -
 apt-get update
-apt-get -y install ros-$ROSDISTRO-desktop-full python-wstool
+echo "hddtemp hddtemp/daemon boolean false" | sudo debconf-set-selections
+apt-get -y install ros-$ROSDISTRO-desktop-full
+apt-get -y install python-wstool python-rosdep
 rosdep init
 
 if [ ${ROSDISTRO} == "hydro" ]; then
