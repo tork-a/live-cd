@@ -119,11 +119,12 @@ wstool init || echo "already initilized"
 wstool set roscpp_tutorials https://github.com/ros/ros_tutorials.git --git -y || echo "already configured"
 wstool update
 cd -
-chown -R 999.999 /home/ubuntu
+chown -R 999.999 /home/ubuntu/catkin_ws
 
 # desktop settings
 if [ ! -e /home/ubuntu/tork-ros.png ]; then
   wget https://github.com/tork-a/live-cd/raw/master/tork-ros.png -O /home/ubuntu/tork-ros.png
+  chown -R 999.999 /home/ubuntu/tork-ros.png
 fi
 ## dbus-launch --exit-with-session gsettings set org.gnome.desktop.background picture-uri file:///home/ubuntu/tork-ros.png
 echo "
