@@ -73,39 +73,39 @@ sh -c 'echo "deb http://packages.ros.org/ros/ubuntu \`lsb_release -cs\` main" > 
 wget http://packages.ros.org/ros.key -O - | apt-key add -
 apt-get update
 echo "hddtemp hddtemp/daemon boolean false" | sudo debconf-set-selections
-apt-get -y install ros-$ROSDISTRO-desktop-full
-apt-get -y install python-wstool python-rosdep
+apt-get -y -q install ros-$ROSDISTRO-desktop-full
+apt-get -y -q install python-wstool python-rosdep
 rosdep init
 
 if [ ${ROSDISTRO} == "hydro" ]; then
 # For ROS
-apt-get -y install ntp
+apt-get -y -q install ntp
 # RTM, Hiro-NXO
-apt-get -y install ros-$ROSDISTRO-rtmros-nextage
-apt-get -y install ros-$ROSDISTRO-rtmros-hironx
-apt-get -y install ros-$ROSDISTRO-rtshell-core 
-apt-get -y install ros-$ROSDISTRO-hironx-tutorial
+apt-get -y -q install ros-$ROSDISTRO-rtmros-nextage
+apt-get -y -q install ros-$ROSDISTRO-rtmros-hironx
+apt-get -y -q install ros-$ROSDISTRO-rtshell-core 
+apt-get -y -q install ros-$ROSDISTRO-hironx-tutorial
 # For Denso
-apt-get -y install ros-$ROSDISTRO-denso
+apt-get -y -q install ros-$ROSDISTRO-denso
 # For seminar
-apt-get -y install ros-$ROSDISTRO-common-tutorials
-apt-get -y install ros-$ROSDISTRO-turtlebot-viz
-apt-get -y install ros-$ROSDISTRO-turtlebot-simulator
-apt-get -y install ros-$ROSDISTRO-turtlebot-apps
-apt-get -y install ros-$ROSDISTRO-turtlebot
+apt-get -y -q install ros-$ROSDISTRO-common-tutorials
+apt-get -y -q install ros-$ROSDISTRO-turtlebot-viz
+apt-get -y -q install ros-$ROSDISTRO-turtlebot-simulator
+apt-get -y -q install ros-$ROSDISTRO-turtlebot-apps
+apt-get -y -q install ros-$ROSDISTRO-turtlebot
 fi
 
 # install emacs
-apt-get -y install emacs
+apt-get -y -q install emacs
 
 # install chromium
-apt-get -y install chromium-browser
+apt-get -y -q install chromium-browser
 
 # install gnome-open
-apt-get -y install libgnome2.0
+apt-get -y -q install libgnome2.0
 
 # for japanese environment
-apt-get -y install language-pack-gnome-ja latex-cjk-japanese xfonts-intl-japanese
+apt-get -y -q install language-pack-gnome-ja latex-cjk-japanese xfonts-intl-japanese
 
 # fix resolve conf (https://github.com/tork-a/live-cd/issues/8)
 ln -sf ../run/resolvconf/resolv.conf /etc/resolv.conf
