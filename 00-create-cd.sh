@@ -50,6 +50,8 @@ cat <<EOF | sudo uck-remaster-chroot-rootfs
 set -x
 set -e
 
+umask 022
+
 if [ ! ${DEBUG} ]; then
 whoami
 if [ \`grep universe /etc/apt/sources.list | wc -l\` -eq 0 ]; then
@@ -66,49 +68,47 @@ deb http://archive.ubuntu.com/ubuntu/ \`lsb_release -cs\`-updates main multivers
 fi
 cat /etc/apt/sources.list
 
-# omajinai
-if [ ${ROSDISTRO} == "indigo" ]; then
-  touch /etc/init.d/systemd-logind
-fi
-apt-get update
-apt-get -y upgrade || apt-get -y -f install || apt-get -y upgrade
-
 # install ros
-wget --no-check-certificat -O /tmp/jsk.rosbuild https://raw.github.com/jsk-ros-pkg/jsk_common/master/jsk.rosbuild
-chmod u+x /tmp/jsk.rosbuild
-/tmp/jsk.rosbuild $ROSDISTRO setup-ros
+sh -c 'echo "deb http://packages.ros.org/ros/ubuntu \`lsb_release -cs\` main" > /etc/apt/sources.list.d/ros-latest.list'
+wget http://packages.ros.org/ros.key -O - | apt-key add -
+apt-get update
+echo "hddtemp hddtemp/daemon boolean false" | sudo debconf-set-selections
+apt-get -y -q install ros-$ROSDISTRO-desktop-full
+apt-get -y -q install python-wstool python-rosdep
+rosdep init
 
 if [ ${ROSDISTRO} == "hydro" ]; then
 # For ROS
-apt-get -y install ntp
+apt-get -y -q install ntp
 # RTM, Hiro-NXO
-apt-get -y install ros-$ROSDISTRO-rtmros-nextage
-apt-get -y install ros-$ROSDISTRO-rtmros-hironx
-apt-get -y install ros-$ROSDISTRO-rtshell-core 
-apt-get -y install ros-$ROSDISTRO-hironx-tutorial
+apt-get -y -q install ros-$ROSDISTRO-rtmros-nextage
+apt-get -y -q install ros-$ROSDISTRO-rtmros-hironx
+apt-get -y -q install ros-$ROSDISTRO-rtshell-core 
+apt-get -y -q install ros-$ROSDISTRO-hironx-tutorial
 # For Denso
-apt-get -y install ros-$ROSDISTRO-denso
+apt-get -y -q install ros-$ROSDISTRO-denso
 # For seminar
-apt-get -y install ros-$ROSDISTRO-common-tutorials
-apt-get -y install ros-$ROSDISTRO-turtlebot-viz
-apt-get -y install ros-$ROSDISTRO-turtlebot-simulator
-apt-get -y install ros-$ROSDISTRO-turtlebot-apps
-apt-get -y install ros-$ROSDISTRO-turtlebot
+apt-get -y -q install ros-$ROSDISTRO-common-tutorials
+apt-get -y -q install ros-$ROSDISTRO-turtlebot-viz
+apt-get -y -q install ros-$ROSDISTRO-turtlebot-simulator
+apt-get -y -q install ros-$ROSDISTRO-turtlebot-apps
+apt-get -y -q install ros-$ROSDISTRO-turtlebot
 fi
+
+# install aptitude
+apt-get -y -q install aptitude
 
 # install emacs
-apt-get -y install emacs
+apt-get -y -q install emacs
 
 # install chromium
-apt-get -y install chromium-browser
+apt-get -y -q install chromium-browser
 
 # install gnome-open
-apt-get -y install libgnome2.0
+apt-get -y -q install libgnome2.0
 
 # for japanese environment
-if [ ${ROSDISTRO} == "hydro" ]; then
-apt-get -y install language-pack-gnome-ja latex-cjk-japanese xfonts-intl-japanese
-fi
+apt-get -y -q install language-pack-gnome-ja latex-cjk-japanese xfonts-intl-japanese
 
 # fix resolve conf (https://github.com/tork-a/live-cd/issues/8)
 ln -sf ../run/resolvconf/resolv.conf /etc/resolv.conf
@@ -122,11 +122,12 @@ wstool init || echo "already initilized"
 wstool set roscpp_tutorials https://github.com/ros/ros_tutorials.git --git -y || echo "already configured"
 wstool update
 cd -
-chown -R 999.999 /home/ubuntu
+chown -R 999.999 /home/ubuntu/catkin_ws
 
 # desktop settings
 if [ ! -e /home/ubuntu/tork-ros.png ]; then
   wget https://github.com/tork-a/live-cd/raw/master/tork-ros.png -O /home/ubuntu/tork-ros.png
+  chown -R 999.999 /home/ubuntu/tork-ros.png
 fi
 ## dbus-launch --exit-with-session gsettings set org.gnome.desktop.background picture-uri file:///home/ubuntu/tork-ros.png
 echo "
