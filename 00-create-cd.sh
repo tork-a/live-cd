@@ -95,6 +95,9 @@ apt-get -y -q install ros-$ROSDISTRO-turtlebot-apps
 apt-get -y -q install ros-$ROSDISTRO-turtlebot
 fi
 
+# install aptitude
+apt-get -y -q install aptitude
+
 # install emacs
 apt-get -y -q install emacs
 
