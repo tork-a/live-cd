@@ -50,6 +50,8 @@ cat <<EOF | sudo uck-remaster-chroot-rootfs
 set -x
 set -e
 
+umask 022
+
 if [ ! ${DEBUG} ]; then
 whoami
 if [ \`grep universe /etc/apt/sources.list | wc -l\` -eq 0 ]; then
