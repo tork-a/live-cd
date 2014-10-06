@@ -108,7 +108,7 @@ apt-get -y -q install chromium-browser
 apt-get -y -q install libgnome2.0
 
 # for japanese environment
-apt-get -y -q install language-pack-gnome-ja latex-cjk-japanese xfonts-intl-japanese
+apt-get -y -q install language-pack-gnome-ja latex-cjk-japanese xfonts-intl-japanese texlive-lang-cjk
 
 # fix resolve conf (https://github.com/tork-a/live-cd/issues/8)
 ln -sf ../run/resolvconf/resolv.conf /etc/resolv.conf
