@@ -93,6 +93,7 @@ apt-get -y -q install ros-$ROSDISTRO-turtlebot-viz
 apt-get -y -q install ros-$ROSDISTRO-turtlebot-simulator
 apt-get -y -q install ros-$ROSDISTRO-turtlebot-apps
 apt-get -y -q install ros-$ROSDISTRO-turtlebot
+apt-get -y -q install ros-$ROSDISTRO-dynamixel-motor
 fi
 
 # install git
