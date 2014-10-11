@@ -111,6 +111,9 @@ apt-get -y -q install chromium-browser
 # install gnome-open
 apt-get -y -q install libgnome2.0
 
+# install freecad
+apt-get -y -q install freecad
+
 # for japanese environment
 apt-get -y -q install language-pack-gnome-ja latex-cjk-japanese xfonts-intl-japanese
 
