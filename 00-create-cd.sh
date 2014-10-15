@@ -94,6 +94,8 @@ apt-get -y -q install ros-$ROSDISTRO-turtlebot-simulator
 apt-get -y -q install ros-$ROSDISTRO-turtlebot-apps
 apt-get -y -q install ros-$ROSDISTRO-turtlebot
 apt-get -y -q install ros-$ROSDISTRO-dynamixel-motor
+# install moveit
+apt-get -y -q install ros-$ROSDISTRO-moveit-full-pr2
 fi
 
 # install git
