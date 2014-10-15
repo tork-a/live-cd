@@ -116,6 +116,9 @@ apt-get -y -q install libgnome2.0
 # install freecad
 apt-get -y -q install freecad
 
+# install moveit
+apt-get -y -q install ros-$ROSDISTRO-moveit-full-pr2
+
 # for japanese environment
 apt-get -y -q install language-pack-gnome-ja latex-cjk-japanese xfonts-intl-japanese
 
