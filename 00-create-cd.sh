@@ -119,6 +119,9 @@ apt-get -y -q install freecad
 # install moveit
 apt-get -y -q install ros-$ROSDISTRO-moveit-full-pr2
 
+# install uvc_camera
+apt-get -y -q install ros-$ROSDISTRO-camera-umd
+
 # for japanese environment
 apt-get -y -q install language-pack-gnome-ja latex-cjk-japanese xfonts-intl-japanese
 
