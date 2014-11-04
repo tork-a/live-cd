@@ -98,6 +98,7 @@ apt-get -y -q install ros-$ROSDISTRO-libuvc-camera
 apt-get -y -q install ros-$ROSDISTRO-moveit-ikfast
 apt-get -y -q install ros-$ROSDISTRO-industrial-*
 apt-get -y -q install ros-$ROSDISTRO-ar-track-alvar
+add-apt-repository -y ppa:openrave/release
 # install moveit
 apt-get -y -q install ros-$ROSDISTRO-moveit-full-pr2
 fi
