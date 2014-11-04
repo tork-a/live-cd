@@ -97,6 +97,7 @@ apt-get -y -q install ros-$ROSDISTRO-dynamixel-motor
 apt-get -y -q install ros-$ROSDISTRO-libuvc-camera
 apt-get -y -q install ros-$ROSDISTRO-moveit-ikfast
 apt-get -y -q install ros-$ROSDISTRO-industrial-*
+apt-get -y -q install ros-$ROSDISTRO-ar-track-alvar
 # install moveit
 apt-get -y -q install ros-$ROSDISTRO-moveit-full-pr2
 fi
