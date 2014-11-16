@@ -87,6 +87,8 @@ apt-get -y -q install ros-$ROSDISTRO-rtmros-nextage
 apt-get -y -q install ros-$ROSDISTRO-rtmros-hironx
 apt-get -y -q install ros-$ROSDISTRO-rtshell-core 
 apt-get -y -q install ros-$ROSDISTRO-hironx-tutorial
+# Add jsk_tools
+apt-get -y -q install ros-$ROSDISTRO-jsk-tools
 # For Denso
 apt-get -y -q install ros-$ROSDISTRO-denso
 # For turtlebot
