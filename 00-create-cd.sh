@@ -104,7 +104,7 @@ apt-get -y -q install ros-$ROSDISTRO-audio-common
 # For moveit
 apt-get -y -q install ros-$ROSDISTRO-moveit-full-pr2
 apt-get -y -q install ros-$ROSDISTRO-moveit-ikfast
-apt-get -y -q install ros-$ROSDISTRO-industrial-*
+apt-get -y -q install ros-$ROSDISTRO-industrial-desktop
 fi
 
 # install git
