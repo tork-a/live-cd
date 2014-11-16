@@ -109,6 +109,8 @@ apt-get -y -q install ros-$ROSDISTRO-audio-common
 apt-get -y -q install ros-$ROSDISTRO-moveit-full-pr2
 apt-get -y -q install ros-$ROSDISTRO-moveit-ikfast
 apt-get -y -q install ros-$ROSDISTRO-industrial-desktop
+# install rosemacs
+apt-get -y -q install rosemacs-el
 fi
 
 # install git
