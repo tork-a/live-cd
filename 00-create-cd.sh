@@ -80,6 +80,8 @@ rosdep init
 if [ ${ROSDISTRO} == "hydro" ]; then
 # For ROS
 apt-get -y -q install ntp
+# ROS desktop-full
+apt-get -y -q install ros-$ROSDISTRO-desktop-full
 # RTM, Hiro-NXO
 apt-get -y -q install ros-$ROSDISTRO-rtmros-nextage
 apt-get -y -q install ros-$ROSDISTRO-rtmros-hironx
@@ -88,7 +90,6 @@ apt-get -y -q install ros-$ROSDISTRO-hironx-tutorial
 # For Denso
 apt-get -y -q install ros-$ROSDISTRO-denso
 # For seminar
-apt-get -y -q install ros-$ROSDISTRO-common-tutorials
 apt-get -y -q install ros-$ROSDISTRO-turtlebot-viz
 apt-get -y -q install ros-$ROSDISTRO-turtlebot-simulator
 apt-get -y -q install ros-$ROSDISTRO-turtlebot-apps
