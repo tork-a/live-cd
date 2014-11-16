@@ -94,6 +94,8 @@ apt-get -y -q install ros-$ROSDISTRO-turtlebot-viz
 apt-get -y -q install ros-$ROSDISTRO-turtlebot-simulator
 apt-get -y -q install ros-$ROSDISTRO-turtlebot-apps
 apt-get -y -q install ros-$ROSDISTRO-turtlebot
+# For kobuki
+apt-get -y -q install ros-$ROSDISTRO-kobuki-desktop
 # For devices
 apt-get -y -q install ros-$ROSDISTRO-dynamixel-motor
 apt-get -y -q install ros-$ROSDISTRO-libuvc-camera
