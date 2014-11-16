@@ -97,7 +97,10 @@ apt-get -y -q install ros-$ROSDISTRO-turtlebot
 # For devices
 apt-get -y -q install ros-$ROSDISTRO-dynamixel-motor
 apt-get -y -q install ros-$ROSDISTRO-libuvc-camera
+apt-get -y -q install ros-$ROSDISTRO-uvc-camera
 apt-get -y -q install ros-$ROSDISTRO-ar-track-alvar
+apt-get -y -q install ros-$ROSDISTRO-openni2-launch
+apt-get -y -q install ros-$ROSDISTRO-audio-common
 # For moveit
 apt-get -y -q install ros-$ROSDISTRO-moveit-full-pr2
 apt-get -y -q install ros-$ROSDISTRO-moveit-ikfast
