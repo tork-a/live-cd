@@ -89,18 +89,19 @@ apt-get -y -q install ros-$ROSDISTRO-rtshell-core
 apt-get -y -q install ros-$ROSDISTRO-hironx-tutorial
 # For Denso
 apt-get -y -q install ros-$ROSDISTRO-denso
-# For seminar
+# For turtlebot
 apt-get -y -q install ros-$ROSDISTRO-turtlebot-viz
 apt-get -y -q install ros-$ROSDISTRO-turtlebot-simulator
 apt-get -y -q install ros-$ROSDISTRO-turtlebot-apps
 apt-get -y -q install ros-$ROSDISTRO-turtlebot
+# For devices
 apt-get -y -q install ros-$ROSDISTRO-dynamixel-motor
 apt-get -y -q install ros-$ROSDISTRO-libuvc-camera
+apt-get -y -q install ros-$ROSDISTRO-ar-track-alvar
+# For moveit
+apt-get -y -q install ros-$ROSDISTRO-moveit-full-pr2
 apt-get -y -q install ros-$ROSDISTRO-moveit-ikfast
 apt-get -y -q install ros-$ROSDISTRO-industrial-*
-apt-get -y -q install ros-$ROSDISTRO-ar-track-alvar
-# install moveit
-apt-get -y -q install ros-$ROSDISTRO-moveit-full-pr2
 fi
 
 # install git
