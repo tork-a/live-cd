@@ -37,6 +37,7 @@ REV=`echo ${ISO} | sed "s/ubuntu-\([0-9]*.[0-9]*\).*/\\1/"`
 
 # init stuff
 if [ ! ${DEBUG} ]; then
+    sudo rm -fr ~/tmp/remaster-new-files/
     sudo uck-remaster-clean
     if [ ! -e /tmp/${ISO} ]; then
         wget -q http://releases.ubuntu.com/${REV}/${ISO} -O /tmp/${ISO}
@@ -158,6 +159,8 @@ echo "
 [org.gnome.desktop.background]
 picture-uri='file:///home/ubuntu/tork-ros.png'
 " > /usr/share/glib-2.0/schemas/10_local-desktop-background.gschema.override
+# above does not work with 14.04
+dbus-launch --exit-with-session gsettings set org.gnome.desktop.background picture-uri file:///home/ubuntu/tork-ros.png
 
 # setup keyboard
 # dbus-launch --exit-with-session gsettings set org.gnome.libgnomekbd.keyboard options "['ctrl\tctrl:swapcaps']"
@@ -181,6 +184,34 @@ favorites=\`gsettings get com.canonical.Unity.Launcher favorites\`
 ## recompile schemas file
 glib-compile-schemas /usr/share/glib-2.0/schemas/
 
+## http://wiki.backbox.org/index.php/Customize_the_Live_DVD
+# Some of the services might restart while updating. We recommend to stop them in order to make a fast booting ISO.
+
+# service apache2 stop
+# service tor stop
+# service polipo stop
+# service greenbone-security-assistant stop
+# service openvas-administrator stop
+# service openvas-manager stop
+# service openvas-scanner stop
+# update-rc.d -f apache2 remove
+# update-rc.d -f tor remove
+# update-rc.d -f polipo remove
+# update-rc.d -f greenbone-security-assistant remove
+# update-rc.d -f openvas-administrator remove
+# update-rc.d -f openvas-manager remove
+# update-rc.d -f openvas-scanner remove
+
+# Now you can update or remove packages, customize everything you want.. Before closing the ISO, it would be best to remove any temporary files which are no longer needed
+
+apt-get clean
+rm -f /etc/apt/*.save
+rm -f /etc/apt/sources.list.d/*.save
+rm -f /var/crash/*
+rm -rf /tmp/* ~/.bash_history
+rm /etc/hosts
+rm /etc/resolv.conf
+rm /var/lib/dbus/machine-id
 
 ## write test code
 if [ ! -e /home/ubuntu/.live-cd-test.sh ]; then
@@ -192,8 +223,8 @@ fi
 EOF
 
 if [ ! ${DEBUG} ]; then
-     # pack file system
-    sudo uck-remaster-pack-rootfs
+    # pack file system
+    sudo uck-remaster-pack-rootfs -c
 
     # create iso
     DATE=`date +%Y%m%d`
