@@ -29,7 +29,7 @@ while [ -n "$1" ] ; do
 done
 
 case $ROSDISTRO in
-    hydro ) ISO=ubuntu-12.04.4-desktop-amd64.iso;;
+    hydro ) ISO=ubuntu-12.04.5-desktop-amd64.iso;;
     indigo) ISO=ubuntu-14.04.1-desktop-amd64.iso;;
     *) echo "[ERROR] Unsupported ROSDISTRO $ROSDISTRO"; exit;;
 esac
