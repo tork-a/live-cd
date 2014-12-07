@@ -75,7 +75,7 @@ apt-get update
 echo "hddtemp hddtemp/daemon boolean false" | sudo debconf-set-selections
 apt-get -y -q install ros-$ROSDISTRO-desktop-full
 apt-get -y -q install python-wstool python-rosdep
-rosdep init
+rosdep init; rosdep update
 
 if [ ${ROSDISTRO} == "hydro" ]; then
 # For ROS
@@ -111,7 +111,13 @@ apt-get -y -q install ros-$ROSDISTRO-moveit-ikfast
 apt-get -y -q install ros-$ROSDISTRO-industrial-desktop
 # install rosemacs
 apt-get -y -q install rosemacs-el
-fi
+
+# for baxter seminar
+(mkdir -p /tmp/baxter_seminar_$$/src; cd /tmp/baxter_seminar_$$; wstool init src; wstool merge -t src https://raw.githubusercontent.com/tork-a/baxter_seminar/master/baxter_seminar.rosinstall; wstool update -t src; rosdep install -r -n -y --rosdistro $ROSDISTRO --from-paths src --ignore-src; rm -fr /tmp/baxter_seminar_$$)
+apt-get -y -q install ros-$ROSDISTRO-qt-build
+
+#
+fi # hydro
 
 # install git
 apt-get -y -q install git
