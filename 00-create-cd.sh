@@ -187,7 +187,6 @@ favorites=\`gsettings get com.canonical.Unity.Launcher favorites\`
 ## recompile schemas file
 glib-compile-schemas /usr/share/glib-2.0/schemas/
 
-
 ## write test code
 if [ ! -e /home/ubuntu/.live-cd-test.sh ]; then
   echo "`cat dot-live-cd-test.sh`" >> /home/ubuntu/.live-cd-test.sh
@@ -206,6 +205,12 @@ if [ ! ${DEBUG} ]; then
     sudo cp -r ~/tmp/remaster-apt-cache/archives ~/tmp/remaster-iso/repository/binary
     sudo chmod a+rx ~/tmp/remaster-iso/repository/binary/
     sudo su -c "cd ${HOME}/tmp/remaster-iso/repository/; dpkg-scanpackages binary /dev/null | gzip -9c > binary/Packages.gz"
+    ## update boot option
+    sudo su -c "cd ${HOME}/tmp/remaster-iso/isolinux; sed -i 's/quiet splash//' txt.cfg"
+    sudo su -c "cd ${HOME}/tmp/remaster-iso/isolinux; sed -i 's/^/#/' isolinux.cfg"
+    sudo su -c "cd ${HOME}/tmp/remaster-iso/isolinux; echo 'include txt.cfg' >> isolinux.cfg"
+
+
     # create iso
     DATE=`date +%Y%m%d`
     FILENAME=tork-ubuntu-ros-${REV}-amd64-${DATE}.iso
