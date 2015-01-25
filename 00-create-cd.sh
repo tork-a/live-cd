@@ -201,10 +201,11 @@ if [ ! ${DEBUG} ]; then
     sudo uck-remaster-pack-rootfs
 
     # create local repository
-    sudo mkdir -p ~/tmp/remaster-iso/repository
-    sudo cp -r ~/tmp/remaster-apt-cache/archives ~/tmp/remaster-iso/repository/binary
-    sudo chmod a+rx ~/tmp/remaster-iso/repository/binary/
-    sudo su -c "cd ${HOME}/tmp/remaster-iso/repository/; dpkg-scanpackages binary /dev/null | gzip -9c > binary/Packages.gz"
+    #sudo mkdir -p ~/tmp/remaster-iso/repository
+    #sudo cp -r ~/tmp/remaster-apt-cache/archives ~/tmp/remaster-iso/repository/binary
+    #sudo chmod a+rx ~/tmp/remaster-iso/repository/binary/
+    #sudo su -c "cd ${HOME}/tmp/remaster-iso/repository/; dpkg-scanpackages binary /dev/null | gzip -9c > binary/Packages.gz"
+
     ## update boot option
     sudo su -c "cd ${HOME}/tmp/remaster-iso/isolinux; sed -i 's/quiet splash//' txt.cfg"
     sudo su -c "cd ${HOME}/tmp/remaster-iso/isolinux; sed -i 's/^/#/' isolinux.cfg"
