@@ -75,7 +75,7 @@ apt-get update
 echo "hddtemp hddtemp/daemon boolean false" | sudo debconf-set-selections
 apt-get -y -q install ros-$ROSDISTRO-desktop-full ros-$ROSDISTRO-catkin
 apt-get -y -q install python-wstool python-rosdep python-catkin-tools
-apt-get -y -q install aptitude git ntp emacs rosemacs-el
+apt-get -y -q install aptitude git ntp emacs
 rosdep init; rosdep update
 
 # setup ros_tutorials
@@ -120,7 +120,13 @@ apt-get -y -q install ros-$ROSDISTRO-turtlebot-viz
 apt-get -y -q install ros-$ROSDISTRO-moveit-full-pr2
 apt-get -y -q install ros-$ROSDISTRO-industrial-desktop
 
+#rosemacs
+apt-get -y -q install rosemacs-el
 fi # hydro
+if [ ${ROSDISTRO} == "indigo" ]; then
+apt-get -y -q install ros-$ROSDISTRO-rosemacs
+fi
+
 
 # install chromium
 apt-get -y -q install chromium-browser
