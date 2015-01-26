@@ -90,7 +90,6 @@ wstool merge -t src https://raw.github.com/tork-a/baxter_seminar/master/baxter_s
 # update and install
 wstool update -t src
 rosdep install -r -n -y --rosdistro $ROSDISTRO --from-paths src --ignore-src
-
 # compile with catkin
 catkin build
 cd -
