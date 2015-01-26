@@ -73,7 +73,7 @@ sh -c 'echo "deb http://packages.ros.org/ros/ubuntu \`lsb_release -cs\` main" > 
 wget http://packages.ros.org/ros.key -O - | apt-key add -
 apt-get update
 echo "hddtemp hddtemp/daemon boolean false" | sudo debconf-set-selections
-apt-get -y -q install ros-$ROSDISTRO-desktop-full ros-$ROSDISTRO-catkin
+apt-get -y -q install ros-$ROSDISTRO-desktop-full ros-$ROSDISTRO-catkin  ros-$ROSDISTRO-rosbash
 apt-get -y -q install python-wstool python-rosdep python-catkin-tools
 apt-get -y -q install aptitude git ntp emacs
 rosdep init; rosdep update
