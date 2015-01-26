@@ -214,6 +214,8 @@ if [ ! ${DEBUG} ]; then
     # create iso
     DATE=`date +%Y%m%d_%H%M%S`
     FILENAME=tork-ubuntu-ros-${REV}-amd64-${DATE}.iso
+    DATE=`date +%m%d`
+                                              #1234 56789012345 678901 2 3 456789012
     sudo uck-remaster-pack-iso $FILENAME -g -d=TORK\ Ubuntu/ROS\ Linux\ \(${DATE}\)
     sudo cp -f ~/tmp/remaster-new-files/$FILENAME .
     sudo chown jenkins.jenkins $FILENAME
