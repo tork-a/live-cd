@@ -94,7 +94,7 @@ rosdep install -r -n -y --rosdistro $ROSDISTRO --from-paths src --ignore-src
 ## until catkin_tools 2.0.x (http://stackoverflow.com/questions/27969057/cant-launch-catkin-build-from-jenkins-job)
 (cd /tmp; apt-get install -qq -y python-setuptools; git clone https://github.com/catkin/catkin_tools || echo "already downloaded"; cd catkin_tools; python setup.py install)
 . /opt/ros/$ROSDISTRO/setup.sh
-catkin build
+catkin build -p 1 --no-status
 cd -
 chown -R 999.999 /home/ubuntu/ros_ws
 
