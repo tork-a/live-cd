@@ -78,18 +78,23 @@ apt-get -y -q install python-wstool python-rosdep python-catkin-tools
 apt-get -y -q install aptitude git ntp emacs
 rosdep init; rosdep update
 
-# setup ros_tutorials
 mkdir -p /home/ubuntu/catkin_ws/src
-cd /home/ubuntu/catkin_ws/src
-wstool init || echo "already initilized"
-wstool set roscpp_tutorials https://github.com/ros/ros_tutorials.git --git -y || echo "already configured"
-wstool update
-rosdep install -r -n -y --rosdistro $ROSDISTRO --from-paths . --ignore-src
+cd /home/ubuntu/catkin_ws
+wstool init src || echo "already initilized"
+
+# setup ros_tutorials
+wstool set -t src roscpp_tutorials https://github.com/ros/ros_tutorials.git --git -y || echo "already configured"
+# for baxter seminar
+wstool merge -t src https://raw.github.com/tork-a/baxter_seminar/master/baxter_seminar.rosinstall
+
+# update and install
+wstool update -t src
+rosdep install -r -n -y --rosdistro $ROSDISTRO --from-paths src --ignore-src
+
+# compile with catkin
+catkin build
 cd -
 chown -R 999.999 /home/ubuntu/catkin_ws
-
-# for baxter seminar
-(mkdir -p /tmp/baxter_seminar_$$/src; cd /tmp/baxter_seminar_$$; wstool init src; wstool merge -t src https://raw.github.com/tork-a/baxter_seminar/master/baxter_seminar.rosinstall; wstool update -t src; rosdep install -r -n -y --rosdistro $ROSDISTRO --from-paths src --ignore-src; rm -fr /tmp/baxter_seminar_$$)
 
 # For turtlebot
 apt-get -y -q install ros-$ROSDISTRO-turtlebot-simulator
@@ -205,9 +210,9 @@ if [ ! ${DEBUG} ]; then
 
 
     # create iso
-    DATE=`date +%Y%m%d__%H%M%S`
+    DATE=`date +%Y%m%d_%H%M%S`
     FILENAME=tork-ubuntu-ros-${REV}-amd64-${DATE}.iso
-    sudo uck-remaster-pack-iso $FILENAME -g -d='TORK Ubuntu/ROS Linux (${DATE})'
+    sudo uck-remaster-pack-iso $FILENAME -g -d=TORK\ Ubuntu/ROS\ Linux\ \(${DATE}\)
     sudo cp -f ~/tmp/remaster-new-files/$FILENAME .
     sudo chown jenkins.jenkins $FILENAME
 fi
