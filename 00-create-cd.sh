@@ -78,8 +78,8 @@ apt-get -y -q install python-wstool python-rosdep python-catkin-tools
 apt-get -y -q install aptitude git ntp emacs
 rosdep init; rosdep update
 
-mkdir -p /home/ubuntu/catkin_ws/src
-cd /home/ubuntu/catkin_ws
+mkdir -p /home/ubuntu/ros_ws/src
+cd /home/ubuntu/ros_ws
 wstool init src || echo "already initilized"
 
 # setup ros_tutorials
@@ -93,7 +93,7 @@ rosdep install -r -n -y --rosdistro $ROSDISTRO --from-paths src --ignore-src
 # compile with catkin
 catkin build
 cd -
-chown -R 999.999 /home/ubuntu/catkin_ws
+chown -R 999.999 /home/ubuntu/ros_ws
 
 # For turtlebot
 apt-get -y -q install ros-$ROSDISTRO-turtlebot-simulator
