@@ -149,14 +149,14 @@ fi
 echo "
 [org.gnome.desktop.background]
 picture-uri='file:///home/ubuntu/tork-ros.png'
-" > /usr/share/glib-2.0/schemas/10_local-desktop-background.gschema.override
+" > /usr/share/glib-2.0/schemas/99_local-desktop-background.gschema.override
 
 # setup keyboard
 # dbus-launch --exit-with-session gsettings set org.gnome.libgnomekbd.keyboard options "['ctrl\tctrl:swapcaps']"
 echo "
 [org.gnome.libgnomekbd.keyboard]
 options=['ctrl\tctrl:nocaps']
-" > /usr/share/glib-2.0/schemas/10_local-libgnomekbd-keyboard.gschema.override
+" > /usr/share/glib-2.0/schemas/99_local-libgnomekbd-keyboard.gschema.override
 
 # add gnome-terminal icon
 dbus-launch --exit-with-session gsettings set com.canonical.Unity.Launcher favorites "\$(gsettings get com.canonical.Unity.Launcher favorites | sed "s/, *'gnome-terminal.desktop' *//g" | sed "s/'gnome-terminal.desktop' *, *//g" | sed -e "s/]$/, 'gnome-terminal.desktop']/")"
@@ -168,7 +168,7 @@ dbus-launch --exit-with-session gsettings set com.canonical.Unity.Launcher favor
 echo "
 [com.canonical.Unity.Launcher]
 favorites=\`gsettings get com.canonical.Unity.Launcher favorites\`
-" > /usr/share/glib-2.0/schemas/10_local-unity-launcher.gschema.override
+" > /usr/share/glib-2.0/schemas/99_local-unity-launcher.gschema.override
 
 ## recompile schemas file
 glib-compile-schemas /usr/share/glib-2.0/schemas/
