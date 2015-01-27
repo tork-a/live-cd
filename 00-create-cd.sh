@@ -73,26 +73,32 @@ sh -c 'echo "deb http://packages.ros.org/ros/ubuntu \`lsb_release -cs\` main" > 
 wget http://packages.ros.org/ros.key -O - | apt-key add -
 apt-get update
 echo "hddtemp hddtemp/daemon boolean false" | sudo debconf-set-selections
-apt-get -y -q install ros-$ROSDISTRO-desktop-full
-apt-get -y -q install python-wstool python-rosdep
+apt-get -y -q install ros-$ROSDISTRO-desktop-full ros-$ROSDISTRO-catkin  ros-$ROSDISTRO-rosbash
+apt-get -y -q install python-wstool python-rosdep python-catkin-tools
+apt-get -y -q install aptitude git ntp emacs
 rosdep init; rosdep update
 
-if [ ${ROSDISTRO} == "hydro" ]; then
-# For ROS
-apt-get -y -q install ntp
-# ROS desktop-full
-apt-get -y -q install ros-$ROSDISTRO-desktop-full
-# RTM, Hiro-NXO
-apt-get -y -q install ros-$ROSDISTRO-rtmros-nextage
-apt-get -y -q install ros-$ROSDISTRO-rtmros-hironx
-apt-get -y -q install ros-$ROSDISTRO-rtshell-core 
-apt-get -y -q install ros-$ROSDISTRO-hironx-tutorial
-# Add jsk_tools
-apt-get -y -q install ros-$ROSDISTRO-jsk-tools
-# For Denso
-apt-get -y -q install ros-$ROSDISTRO-denso
+mkdir -p /home/ubuntu/ros_ws/src
+cd /home/ubuntu/ros_ws
+wstool init src || echo "already initilized"
+
+# setup ros_tutorials
+wstool set -t src roscpp_tutorials https://github.com/ros/ros_tutorials.git --git -y || echo "already configured"
+# for baxter seminar
+wstool merge -t src https://raw.github.com/tork-a/baxter_seminar/master/baxter_seminar.rosinstall
+
+# update and install
+wstool update -t src
+rosdep install -r -n -y --rosdistro $ROSDISTRO --from-paths src --ignore-src
+# compile with catkin
+## until catkin_tools 2.0.x (http://stackoverflow.com/questions/27969057/cant-launch-catkin-build-from-jenkins-job)
+(cd /tmp; apt-get install -qq -y python-setuptools; git clone https://github.com/catkin/catkin_tools || echo "already downloaded"; cd catkin_tools; python setup.py install)
+. /opt/ros/$ROSDISTRO/setup.sh
+catkin build -p 1 --no-status
+cd -
+chown -R 999.999 /home/ubuntu/ros_ws
+
 # For turtlebot
-apt-get -y -q install ros-$ROSDISTRO-turtlebot-viz
 apt-get -y -q install ros-$ROSDISTRO-turtlebot-simulator
 apt-get -y -q install ros-$ROSDISTRO-turtlebot-apps
 apt-get -y -q install ros-$ROSDISTRO-turtlebot
@@ -106,27 +112,28 @@ apt-get -y -q install ros-$ROSDISTRO-ar-track-alvar
 apt-get -y -q install ros-$ROSDISTRO-openni2-launch
 apt-get -y -q install ros-$ROSDISTRO-audio-common
 # For moveit
-apt-get -y -q install ros-$ROSDISTRO-moveit-full-pr2
 apt-get -y -q install ros-$ROSDISTRO-moveit-ikfast
-apt-get -y -q install ros-$ROSDISTRO-industrial-desktop
-# install rosemacs
-apt-get -y -q install rosemacs-el
-
-# for baxter seminar
-(mkdir -p /tmp/baxter_seminar_$$/src; cd /tmp/baxter_seminar_$$; wstool init src; wstool merge -t src https://raw.githubusercontent.com/tork-a/baxter_seminar/master/baxter_seminar.rosinstall; wstool update -t src; rosdep install -r -n -y --rosdistro $ROSDISTRO --from-paths src --ignore-src; rm -fr /tmp/baxter_seminar_$$)
+# qt-build
 apt-get -y -q install ros-$ROSDISTRO-qt-build
 
-#
+if [ ${ROSDISTRO} == "hydro" ]; then
+# RTM, Hiro-NXO
+apt-get -y -q install ros-$ROSDISTRO-hironx-tutorial
+# For Denso
+apt-get -y -q install ros-$ROSDISTRO-denso
+# For turtlebot
+apt-get -y -q install ros-$ROSDISTRO-turtlebot-viz
+# For moveit
+apt-get -y -q install ros-$ROSDISTRO-moveit-full-pr2
+apt-get -y -q install ros-$ROSDISTRO-industrial-desktop
+
+#rosemacs
+apt-get -y -q install rosemacs-el
 fi # hydro
+if [ ${ROSDISTRO} == "indigo" ]; then
+apt-get -y -q install ros-$ROSDISTRO-rosemacs
+fi
 
-# install git
-apt-get -y -q install git
-
-# install aptitude
-apt-get -y -q install aptitude
-
-# install emacs
-apt-get -y -q install emacs
 
 # install chromium
 apt-get -y -q install chromium-browser
@@ -145,32 +152,24 @@ ln -sf ../run/resolvconf/resolv.conf /etc/resolv.conf
 
 fi # ( [ ! ${DEBUG} ] )
 
-# setup catkin
-mkdir -p /home/ubuntu/catkin_ws/src
-cd /home/ubuntu/catkin_ws/src
-wstool init || echo "already initilized"
-wstool set roscpp_tutorials https://github.com/ros/ros_tutorials.git --git -y || echo "already configured"
-wstool update
-cd -
-chown -R 999.999 /home/ubuntu/catkin_ws
-
 # desktop settings
 if [ ! -e /home/ubuntu/tork-ros.png ]; then
   wget https://github.com/tork-a/live-cd/raw/master/tork-ros.png -O /home/ubuntu/tork-ros.png
   chown -R 999.999 /home/ubuntu/tork-ros.png
 fi
+
 ## dbus-launch --exit-with-session gsettings set org.gnome.desktop.background picture-uri file:///home/ubuntu/tork-ros.png
 echo "
 [org.gnome.desktop.background]
 picture-uri='file:///home/ubuntu/tork-ros.png'
-" > /usr/share/glib-2.0/schemas/10_local-desktop-background.gschema.override
+" > /usr/share/glib-2.0/schemas/99_local-desktop-background.gschema.override
 
 # setup keyboard
 # dbus-launch --exit-with-session gsettings set org.gnome.libgnomekbd.keyboard options "['ctrl\tctrl:swapcaps']"
 echo "
 [org.gnome.libgnomekbd.keyboard]
 options=['ctrl\tctrl:nocaps']
-" > /usr/share/glib-2.0/schemas/10_local-libgnomekbd-keyboard.gschema.override
+" > /usr/share/glib-2.0/schemas/99_local-libgnomekbd-keyboard.gschema.override
 
 # add gnome-terminal icon
 dbus-launch --exit-with-session gsettings set com.canonical.Unity.Launcher favorites "\$(gsettings get com.canonical.Unity.Launcher favorites | sed "s/, *'gnome-terminal.desktop' *//g" | sed "s/'gnome-terminal.desktop' *, *//g" | sed -e "s/]$/, 'gnome-terminal.desktop']/")"
@@ -182,7 +181,7 @@ dbus-launch --exit-with-session gsettings set com.canonical.Unity.Launcher favor
 echo "
 [com.canonical.Unity.Launcher]
 favorites=\`gsettings get com.canonical.Unity.Launcher favorites\`
-" > /usr/share/glib-2.0/schemas/10_local-unity-launcher.gschema.override
+" > /usr/share/glib-2.0/schemas/99_local-unity-launcher.gschema.override
 
 ## recompile schemas file
 glib-compile-schemas /usr/share/glib-2.0/schemas/
@@ -213,9 +212,11 @@ if [ ! ${DEBUG} ]; then
 
 
     # create iso
-    DATE=`date +%Y%m%d`
+    DATE=`date +%Y%m%d_%H%M%S`
     FILENAME=tork-ubuntu-ros-${REV}-amd64-${DATE}.iso
-    sudo uck-remaster-pack-iso $FILENAME -g --description="TORK Ubuntu/ROS Linux (${DATE})"
+    DATE=`date +%m%d`
+                                              #1234 56789012345 678901 2 3 456789012
+    sudo uck-remaster-pack-iso $FILENAME -g -d=TORK\ Ubuntu/ROS\ Linux\ \(${DATE}\)
     sudo cp -f ~/tmp/remaster-new-files/$FILENAME .
     sudo chown jenkins.jenkins $FILENAME
 fi
