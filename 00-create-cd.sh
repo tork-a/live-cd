@@ -78,25 +78,42 @@ apt-get -y -q install python-wstool python-rosdep python-catkin-tools
 apt-get -y -q install aptitude git ntp emacs
 rosdep init; rosdep update
 
-mkdir -p /home/ubuntu/ros_ws/src
-cd /home/ubuntu/ros_ws
+# create users
+apt-get -y -q install passwd openssl
+groupadd -g 990 beginner
+groupadd -g 991 intermediate
+groupadd -g 992 baxter
+useradd -p U6aMy0wojraho -u 990 -g 990 -s /bin/bash -m beginner
+useradd -p U6aMy0wojraho -u 991 -g 991 -s /bin/bash -m intermediate
+useradd -p U6aMy0wojraho -u 992 -g 992 -s /bin/bash -m baxter
+
+mkdir -p /home/ubuntu/
+chown -R 999.999 /home/ubuntu/
+#
+. /opt/ros/$ROSDISTRO/setup.sh
+
+( # beginner seminar
+mkdir -p /home/beginner/catkin_ws/src
+cd /home/beginner/catkin_ws
 wstool init src || echo "already initilized"
-
-# setup ros_tutorials
 wstool set -t src roscpp_tutorials https://github.com/ros/ros_tutorials.git --git -y || echo "already configured"
-# for baxter seminar
-wstool merge -t src https://raw.github.com/tork-a/baxter_seminar/master/baxter_seminar.rosinstall
-
-# update and install
 wstool update -t src
 rosdep install -r -n -y --rosdistro $ROSDISTRO --from-paths src --ignore-src
-# compile with catkin
-## until catkin_tools 2.0.x (http://stackoverflow.com/questions/27969057/cant-launch-catkin-build-from-jenkins-job)
-(cd /tmp; apt-get install -qq -y python-setuptools; git clone https://github.com/catkin/catkin_tools || echo "already downloaded"; cd catkin_tools; python setup.py install)
-. /opt/ros/$ROSDISTRO/setup.sh
-catkin build -p 1 --no-status
-cd -
-chown -R 999.999 /home/ubuntu/ros_ws
+catkin_make
+chown -R 990.990 /home/beginner/catkin_ws
+)
+
+
+( # baxter seminar
+mkdir -p /home/baxter/ros_ws/src
+cd /home/baxter/ros_ws
+wstool init src || echo "already initilized"
+wstool merge -t src https://raw.github.com/tork-a/baxter_seminar/master/baxter_seminar.rosinstall
+wstool update -t src
+rosdep install -r -n -y --rosdistro $ROSDISTRO --from-paths src --ignore-src
+catkin_make
+chown -R 992.992 /home/baxter/ros_ws
+)
 
 # For turtlebot
 apt-get -y -q install ros-$ROSDISTRO-turtlebot-simulator
