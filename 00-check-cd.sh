@@ -6,6 +6,7 @@ set -e
 iso=${1:-tork-ubuntu-ros-12.04-amd64-*.iso}
 
 # create usb memory
+rm -fr /tmp/disk.usb
 dd if=/dev/zero of=/tmp/disk.usb bs=1024k count=32
 echo "n
 p
