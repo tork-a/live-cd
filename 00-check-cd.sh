@@ -13,7 +13,7 @@ p
 1
 
 
-w
+q
 "|/sbin/fdisk /tmp/disk.usb; /sbin/mkfs.ext2 -F /tmp/disk.usb
 
 # run qemu
