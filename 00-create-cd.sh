@@ -134,7 +134,7 @@ apt-get -y -q install ros-$ROSDISTRO-denso
 
 if [ ${ROSDISTRO} == "hydro" ]; then
 # RTM, Hiro-NXO
-apt-get -y -q install ros-$ROSDISTRO-hironx-tutorial
+#apt-get -y -q install ros-$ROSDISTRO-hironx-tutorial
 # For turtlebot
 apt-get -y -q install ros-$ROSDISTRO-turtlebot-viz
 # For moveit
