@@ -75,7 +75,7 @@ apt-get update
 echo "hddtemp hddtemp/daemon boolean false" | sudo debconf-set-selections
 apt-get -y -q install ros-$ROSDISTRO-desktop-full ros-$ROSDISTRO-catkin  ros-$ROSDISTRO-rosbash
 apt-get -y -q install python-wstool python-rosdep python-catkin-tools
-apt-get -y -q install aptitude git ntp emacs
+apt-get -y -q install aptitude git ntp emacs vim
 rosdep init; rosdep update
 
 # make home directory
