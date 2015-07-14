@@ -7,7 +7,7 @@ function check-network {
 
 function check-rospack {
     echo "*** Check roscpp installed"
-    source /opt/ros/hydro/setup.bash
+    source .bashrc
     rospack find roscpp
 }
 
