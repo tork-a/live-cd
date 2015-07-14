@@ -85,7 +85,7 @@ cp /etc/skel/.??* /home/ubuntu
 chown -R 999.999 /home/ubuntu/.??*
 echo "
 # ROS setup
-source /opt/ros/$ROS_DISTRO/setup.bash
+source /opt/ros/$ROSDISTRO/setup.bash
 " >> /home/ubuntu/.bashrc
 HOME=/home/ubuntu rosdep update
 chown -R 999.999 /home/ubuntu/.ros
