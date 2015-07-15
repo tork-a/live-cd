@@ -85,7 +85,7 @@ cp /etc/skel/.??* /home/ubuntu
 chown -R 999.999 /home/ubuntu/.??*
 echo "
 # ROS setup
-source /opt/ros/$ROS_DISTRO/setup.bash
+source /opt/ros/$ROSDISTRO/setup.bash
 " >> /home/ubuntu/.bashrc
 HOME=/home/ubuntu rosdep update
 chown -R 999.999 /home/ubuntu/.ros
@@ -161,7 +161,10 @@ apt-get -y -q install freecad
 apt-get -y -q install language-pack-gnome-ja latex-cjk-japanese xfonts-intl-japanese
 
 # fix resolve conf (https://github.com/tork-a/live-cd/issues/8)
-ln -sf ../run/resolvconf/resolv.conf /etc/resolv.conf
+rm -fr /etc/resolv.conf
+apt-get -y -q install debconf-utils
+echo "resolvconf resolvconf/linkify-resolvconf boolean true" | debconf-set-selections -
+dpkg-reconfigure -fnoninteractive resolvconf
 
 fi # ( [ ! ${DEBUG} ] )
 
