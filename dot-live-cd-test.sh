@@ -21,9 +21,11 @@ echo "===DONE==="
 } 2>&1 | tee -a /mnt/result.txt
 
 
-echo " ==== cat /mnt/result.txt ==== "
-cat /mnt/result.txt
+echo " ==== cat .bashrc ==== " | tee -a /mnt/result.txt
+cat .bashrc | tee -a /mnt/result.txt
 
+echo " ==== env ==== " | tee -a /mnt/result.txt
+env | tee -a /mnt/result.txt
 
 # done
 
