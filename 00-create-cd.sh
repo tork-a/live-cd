@@ -78,6 +78,17 @@ echo "hddtemp hddtemp/daemon boolean false" | sudo debconf-set-selections
 apt-get -y -q install ros-$ROSDISTRO-desktop-full ros-$ROSDISTRO-catkin  ros-$ROSDISTRO-rosbash
 apt-get -y -q install python-wstool python-rosdep python-catkin-tools
 apt-get -y -q install aptitude git ntp emacs vim
+
+# mongodb hack for 14.04
+if [ ${ROSDISTRO} == "indigo" ]; then
+  echo "mongodb:x:130:65534::/home/mongodb:/bin/false" >> /etc/passwd
+  echo "mongodb:x:130:mongodb" >> /etc/group
+  apt-get install -q -y mongodb mongodb-clients mongodb-server -o Dpkg::Options::="--force-confdef" || echo "ok"
+  sed -i -r 's/invoke-rc.d/#&/' /var/lib/dpkg/info/mongodb-server.postinst
+  apt-get install -q -y mongodb mongodb-clients mongodb-server -o Dpkg::Options::="--force-confdef" || echo "ok"
+fi
+
+# rosdep
 rosdep init; rosdep update
 
 # make home directory
