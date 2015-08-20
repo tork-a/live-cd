@@ -35,6 +35,8 @@ case $ROSDISTRO in
 esac
 REV=`echo ${ISO} | sed "s/ubuntu-\([0-9]*.[0-9]*\).*/\\1/"`
 
+DATE=`date +%Y%m%d_%H%M%S`
+
 # init stuff
 if [ ! ${DEBUG} ]; then
     sudo uck-remaster-clean
@@ -86,6 +88,8 @@ chown -R 999.999 /home/ubuntu/.??*
 echo "
 # ROS setup
 source /opt/ros/$ROSDISTRO/setup.bash
+
+# This file is created on ${DATE}
 " >> /home/ubuntu/.bashrc
 HOME=/home/ubuntu rosdep update
 chown -R 999.999 /home/ubuntu/.ros
@@ -228,7 +232,6 @@ if [ ! ${DEBUG} ]; then
 
 
     # create iso
-    DATE=`date +%Y%m%d_%H%M%S`
     FILENAME=tork-ubuntu-ros-${REV}-amd64-${DATE}.iso
     DATE=`date +%m%d`
                                               #1234 56789012345 678901 2 3 456789012
