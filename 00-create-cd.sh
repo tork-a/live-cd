@@ -30,10 +30,12 @@ done
 
 case $ROSDISTRO in
     hydro ) ISO=ubuntu-12.04.5-desktop-amd64.iso;;
-    indigo) ISO=ubuntu-14.04.2-desktop-amd64.iso;;
+    indigo) ISO=ubuntu-14.04.3-desktop-amd64.iso;;
     *) echo "[ERROR] Unsupported ROSDISTRO $ROSDISTRO"; exit;;
 esac
 REV=`echo ${ISO} | sed "s/ubuntu-\([0-9]*.[0-9]*\).*/\\1/"`
+
+DATE=`date +%Y%m%d_%H%M%S`
 
 # init stuff
 if [ ! ${DEBUG} ]; then
@@ -76,7 +78,18 @@ echo "hddtemp hddtemp/daemon boolean false" | sudo debconf-set-selections
 apt-get -y -q install ros-$ROSDISTRO-desktop-full ros-$ROSDISTRO-catkin  ros-$ROSDISTRO-rosbash
 apt-get -y -q install python-wstool python-rosdep python-catkin-tools
 apt-get -y -q install aptitude git ntp emacs vim
-rosdep init; rosdep update
+
+# mongodb hack for 14.04
+if [ ${ROSDISTRO} == "indigo" ]; then
+  echo "mongodb:x:130:65534::/home/mongodb:/bin/false" >> /etc/passwd
+  echo "mongodb:x:130:mongodb" >> /etc/group
+  apt-get install -q -y mongodb mongodb-clients mongodb-server -o Dpkg::Options::="--force-confdef" || echo "ok"
+  sed -i -r 's/invoke-rc.d/#&/' /var/lib/dpkg/info/mongodb-server.postinst
+  apt-get install -q -y mongodb mongodb-clients mongodb-server -o Dpkg::Options::="--force-confdef" || echo "ok"
+fi
+
+# rosdep
+rosdep init; rosdep update || echo "ok"
 
 # make home directory
 mkdir -p /home/ubuntu/
@@ -86,6 +99,8 @@ chown -R 999.999 /home/ubuntu/.??*
 echo "
 # ROS setup
 source /opt/ros/$ROSDISTRO/setup.bash
+
+# This file is created on ${DATE}
 " >> /home/ubuntu/.bashrc
 HOME=/home/ubuntu rosdep update
 chown -R 999.999 /home/ubuntu/.ros
@@ -228,7 +243,6 @@ if [ ! ${DEBUG} ]; then
 
 
     # create iso
-    DATE=`date +%Y%m%d_%H%M%S`
     FILENAME=tork-ubuntu-ros-${REV}-amd64-${DATE}.iso
     DATE=`date +%m%d`
                                               #1234 56789012345 678901 2 3 456789012
