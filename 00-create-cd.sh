@@ -89,7 +89,7 @@ if [ ${ROSDISTRO} == "indigo" ]; then
 fi
 
 # rosdep
-rosdep init; rosdep update
+rosdep init; rosdep update || echo "ok"
 
 # make home directory
 mkdir -p /home/ubuntu/
