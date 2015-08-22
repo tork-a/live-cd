@@ -147,6 +147,8 @@ apt-get -y -q install ros-$ROSDISTRO-moveit-full-pr2
 apt-get -y -q install ros-$ROSDISTRO-qt-build
 # For Denso
 apt-get -y -q install ros-$ROSDISTRO-denso
+# For Nextage
+apt-get -y -q install ros-$ROSDISTRO-rtmros-nextage
 
 if [ ${ROSDISTRO} == "hydro" ]; then
 # RTM, Hiro-NXO
@@ -161,6 +163,9 @@ apt-get -y -q install rosemacs-el
 fi # hydro
 if [ ${ROSDISTRO} == "indigo" ]; then
 apt-get -y -q install ros-$ROSDISTRO-rosemacs
+
+# hakuto
+apt-get -y -q install ros-$ROSDISTRO-hakuto
 fi
 
 
