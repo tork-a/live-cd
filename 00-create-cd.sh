@@ -69,6 +69,7 @@ deb http://archive.ubuntu.com/ubuntu/ \`lsb_release -cs\`-updates main multivers
 " >> /etc/apt/sources.list;
 fi
 cat /etc/apt/sources.list
+([ -e /etc/apt/sources.list~ ] && rm -f /etc/apt/sources.list~; ls /etc/apt/)
 
 # install ros
 sh -c 'echo "deb http://packages.ros.org/ros/ubuntu \`lsb_release -cs\` main" > /etc/apt/sources.list.d/ros-latest.list'
