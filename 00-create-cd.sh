@@ -7,11 +7,12 @@ function usage {
     echo >&2 "usage: $0"
     echo >&2 "          [--help] print this message"
     echo >&2 "          [--debug] debug mode "
+    echo >&2 "          [--local-repo] keep deb as local repo "
     echo >&2 "          [--rosdistro (hydro|indigo)] "
     exit 0
 }
 
-OPT=`getopt -o hdr: -l help,debug,rosdistro: -- $*`
+OPT=`getopt -o hdlr: -l help,debug,local-repo,rosdistro: -- $*`
 if [ $? != 0 ]; then
     usage
 fi
@@ -23,6 +24,7 @@ while [ -n "$1" ] ; do
     case $1 in
         -h| --help) usage; shift;;
         -d| --debug) DEBUG=TRUE; shift;;
+        -l| --local-repo) ENABLE_LOCAL_REPOSITORY=TRUE; shift;;
         -r| --rosdistro) ROSDISTRO=$2; shift 2;;
         --) shift; break;;
     esac
@@ -237,10 +239,12 @@ if [ ! ${DEBUG} ]; then
     sudo uck-remaster-pack-rootfs
 
     # create local repository
-    #sudo mkdir -p ~/tmp/remaster-iso/repository
-    #sudo cp -r ~/tmp/remaster-apt-cache/archives ~/tmp/remaster-iso/repository/binary
-    #sudo chmod a+rx ~/tmp/remaster-iso/repository/binary/
-    #sudo su -c "cd ${HOME}/tmp/remaster-iso/repository/; dpkg-scanpackages binary /dev/null | gzip -9c > binary/Packages.gz"
+    if [ ${ENABLE_LOCAL_REPOSITORY} ]; then
+      sudo mkdir -p ~/tmp/remaster-iso/repository
+      sudo cp -r ~/tmp/remaster-apt-cache/archives ~/tmp/remaster-iso/repository/binary
+      sudo chmod a+rx ~/tmp/remaster-iso/repository/binary/
+      sudo su -c "cd ${HOME}/tmp/remaster-iso/repository/; dpkg-scanpackages binary /dev/null | gzip -9c > binary/Packages.gz"
+   fi
 
     ## update boot option
     sudo su -c "cd ${HOME}/tmp/remaster-iso/isolinux; sed -i 's/quiet splash//' txt.cfg"
@@ -249,7 +253,11 @@ if [ ! ${DEBUG} ]; then
 
 
     # create iso
-    FILENAME=tork-ubuntu-ros-${REV}-amd64-${DATE}.iso
+    if [ ${ENABLE_LOCAL_REPOSITORY} ]; then
+        FILENAME=tork-ubuntu-ros-${REV}-local-repo-amd64-${DATE}.iso
+    else
+        FILENAME=tork-ubuntu-ros-${REV}-amd64-${DATE}.iso
+    fi
     DATE=`date +%m%d`
                                               #1234 56789012345 678901 2 3 456789012
     sudo uck-remaster-pack-iso $FILENAME -g -d=TORK\ Ubuntu/ROS\ Linux\ \(${DATE}\)
