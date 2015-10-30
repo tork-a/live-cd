@@ -1,0 +1,19 @@
+dependencies:
+  pre:
+    - sudo apt-get update -qq
+    - sudo apt-get install -y uck
+    - wget -q http://releases.ubuntu.com/14.04/ubuntu-14.04.3-desktop-amd64.iso -O /tmp/ubuntu-14.04.3-desktop-amd64.iso
+general:
+  artifacts:
+    - "tork-ubuntu-ros-14.04-amd64-*.iso"
+test:
+  override:
+    - sudo apt-get install p7zip-full
+    - 7z x /tmp/ubuntu-14.04.3-desktop-amd64.iso -o/tmp/iso
+    - mkdir -p ~/tmp/remaster-iso
+    - ls -al ~/tmp/
+    - sudo mount --bind /tmp/iso ~/tmp/remaster-iso
+    - ./00-create-cd.sh  --rosdistro indigo
+    - ./00-create-cd.sh  --local-repo --rosdistro indigo
+    - export DISPLAY=:0
+    - sudo ./00-check-cd.sh tork-ubuntu-ros-14.04-amd64-*.iso
