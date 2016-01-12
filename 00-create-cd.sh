@@ -117,6 +117,8 @@ wstool init src || echo "already initilized"
 wstool set -t src roscpp_tutorials https://github.com/ros/ros_tutorials.git --git -y || echo "already configured"
 # for baxter seminar
 wstool merge -t src https://raw.github.com/tork-a/baxter_seminar/master/baxter_seminar.rosinstall
+# For TORK ROS workshop
+wstool set -t src tork-a/ros_seminar https://github.com/tork-a/ros_seminar.git --git -y || echo "tork-a/ros_seminar already configured"
 
 # update and install
 wstool update -t src
