@@ -122,8 +122,6 @@ wstool merge -t src https://raw.github.com/tork-a/baxter_seminar/master/baxter_s
 wstool update -t src
 rosdep install -r -n -y --rosdistro $ROSDISTRO --from-paths src --ignore-src
 # compile with catkin
-## until catkin_tools 2.0.x (http://stackoverflow.com/questions/27969057/cant-launch-catkin-build-from-jenkins-job)
-(cd /tmp; apt-get install -qq -y python-setuptools; git clone https://github.com/catkin/catkin_tools || echo "already downloaded"; cd catkin_tools; python setup.py install)
 . /opt/ros/$ROSDISTRO/setup.sh
 catkin build -p 1 --no-status
 cd -
