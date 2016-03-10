@@ -8,14 +8,14 @@ This repository hosts scripts to create Ubuntu `.iso` images where [ROS](http://
 
 1. What are the generated .iso files?
 
- * The generated .iso works as the normal Ubuntu .iso image. ROS is already installed too. Versions depend on which .iso you download from artifacts page.
- * It keeps DEB files that were used during .iso generation 
+ * The generated .iso works as the normal Ubuntu .iso image. ROS is already installed in addition. Versions of Ubuntu and ROS depend on .iso of your choice
+ * Each .iso file includes DEB files that were used during .iso generation 
 
-2. So, what can I do with these generated .iso files for example?
+2. So, what can I do with these generated `.iso` files for example?
 
- * (general Ubuntu .iso feature) You can run Ubuntu on your computer from the CD/thumbdrive, without installing it. Also you can install Ubuntu on your computer.
- * In the above scenario, ROS is already installed.
- * You can use a thumbdrive made with these .iso images as as the local DEB repository. So for instance, if your computer is disconnected from internet but still want to install some ROS packages from DEB (ie. by apt), this works.
+ * (general Ubuntu .iso feature) You can run Ubuntu on your computer from the CD/thumbdrive, without installing it. Also you can install Ubuntu on your computer from it.
+   * In the above scenario, ROS is already installed.
+ * You can use a thumbdrive made with these .iso images as as the local DEB repository. So for instance, if your computer is disconnected from internet but you still want to install some ROS packages from DEB (ie. by apt-get), this works.
 
 How to create new .iso images
 ------------------------------------------------
@@ -41,7 +41,7 @@ sudo su -c 'echo "deb file:///media/USB%20DISK/repository binary/" > /etc/apt/so
 sudo su -c 'sed -i "s/deb/# deb/" /etc/apt/sources.list.d/ros-latest.list'
 sudo apt-get update
 ```
-3. Now, you can `apt-get install` without Internet connection
+3. Now, you can `apt-get install` ROS packages without Internet connection
 4. Do not forget to comment in ROS repository after you finish working
 ```
 sudo su -c 'sed -i "s/# deb/deb/" /etc/apt/sources.list.d/ros-latest.list'
