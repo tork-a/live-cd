@@ -148,7 +148,7 @@ apt-get -y -q install ros-$ROSDISTRO-qt-build
 # For Denso
 apt-get -y -q install ros-$ROSDISTRO-denso
 # For Nextage
-apt-get -y -q install ros-$ROSDISTRO-rtmros-nextage
+apt-get -y -q install ros-$ROSDISTRO-rtmros-hironx ros-$ROSDISTRO-rtmros-nextage
 
 if [ ${ROSDISTRO} == "hydro" ]; then
 # RTM, Hiro-NXO
