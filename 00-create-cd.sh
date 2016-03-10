@@ -122,8 +122,6 @@ wstool merge -t src https://raw.github.com/tork-a/baxter_seminar/master/baxter_s
 wstool update -t src
 rosdep install -r -n -y --rosdistro $ROSDISTRO --from-paths src --ignore-src
 # compile with catkin
-## until catkin_tools 2.0.x (http://stackoverflow.com/questions/27969057/cant-launch-catkin-build-from-jenkins-job)
-(cd /tmp; apt-get install -qq -y python-setuptools; git clone https://github.com/catkin/catkin_tools || echo "already downloaded"; cd catkin_tools; python setup.py install)
 . /opt/ros/$ROSDISTRO/setup.sh
 catkin build -p 1 --no-status
 cd -
@@ -181,14 +179,7 @@ apt-get -y -q install libgnome2.0
 apt-get -y -q install freecad
 
 # for japanese environment
-# work around for  # https://bugs.launchpad.net/ubuntu/+source/language-pack-gnome-ja-base/+bug/1512262
-if [ ${ROSDISTRO} == "indigo" ]; then
-  apt-get install -y language-pack-ja=1:14.04+20140410
-  apt-get install -y language-pack-gnome-ja=1:14.04+20140410
-fi
-##
-apt-get -y -q install language-pack-ja-base language-pack-gnome-ja-base language-pack-ja language-pack-gnome-ja
-apt-get -y -q install latex-cjk-japanese xfonts-intl-japanese
+apt-get -y -q install language-pack-gnome-ja latex-cjk-japanese xfonts-intl-japanese
 
 # fix resolve conf (https://github.com/tork-a/live-cd/issues/8)
 rm -fr /etc/resolv.conf

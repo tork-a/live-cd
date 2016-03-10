@@ -86,6 +86,7 @@ grep -c "===DONE===" /tmp/mount.$$/result.txt || (umount /tmp/mount.$$; exit 1)
 grep -c "=== NG ===" /tmp/mount.$$/result.txt && (umount /tmp/mount.$$; exit 1)
 
 # exit ok
+sleep 5
 umount /tmp/mount.$$
 exit 0
 
