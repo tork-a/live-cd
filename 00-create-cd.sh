@@ -133,6 +133,7 @@ chown -R 999.999 /home/ubuntu/catkin_ws
 apt-get -y -q install ros-$ROSDISTRO-turtlebot-simulator
 apt-get -y -q install ros-$ROSDISTRO-turtlebot-apps
 apt-get -y -q install ros-$ROSDISTRO-turtlebot
+apt-get -y -q install ros-$ROSDISTRO-turtlebot-viz
 # For kobuki
 apt-get -y -q install ros-$ROSDISTRO-kobuki-desktop
 # For devices
@@ -145,6 +146,7 @@ apt-get -y -q install ros-$ROSDISTRO-audio-common
 # For moveit
 apt-get -y -q install ros-$ROSDISTRO-moveit-ikfast
 apt-get -y -q install ros-$ROSDISTRO-moveit-full-pr2
+apt-get -y -q install ros-$ROSDISTRO-industrial-desktop
 # qt-build
 apt-get -y -q install ros-$ROSDISTRO-qt-build
 # For Denso
@@ -155,10 +157,6 @@ apt-get -y -q install ros-$ROSDISTRO-rtmros-hironx ros-$ROSDISTRO-rtmros-nextage
 if [ ${ROSDISTRO} == "hydro" ]; then
 # RTM, Hiro-NXO
 #apt-get -y -q install ros-$ROSDISTRO-hironx-tutorial
-# For turtlebot
-apt-get -y -q install ros-$ROSDISTRO-turtlebot-viz
-# For moveit
-apt-get -y -q install ros-$ROSDISTRO-industrial-desktop
 
 #rosemacs
 apt-get -y -q install rosemacs-el
