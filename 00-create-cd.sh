@@ -181,6 +181,9 @@ apt-get -y -q install freecad
 # for japanese environment
 apt-get -y -q install language-pack-gnome-ja latex-cjk-japanese xfonts-intl-japanese
 
+# development/debug tools
+apt-get -y -q install sshpass synaptic
+
 # fix resolve conf (https://github.com/tork-a/live-cd/issues/8)
 rm -fr /etc/resolv.conf
 apt-get -y -q install debconf-utils
