@@ -189,6 +189,9 @@ apt-get -y -q install debconf-utils
 echo "resolvconf resolvconf/linkify-resolvconf boolean true" | debconf-set-selections -
 dpkg-reconfigure -fnoninteractive resolvconf
 
+# For (mainly) LeapMotion
+apt-get -y -q install libgl1-mesa-glx-lts-trusty
+
 fi # ( [ ! ${DEBUG} ] )
 
 # desktop settings
