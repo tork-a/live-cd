@@ -32,7 +32,7 @@ done
 
 case $ROSDISTRO in
     hydro ) ISO=ubuntu-12.04.5-desktop-amd64.iso;;
-    indigo) ISO=ubuntu-14.04.3-desktop-amd64.iso;;
+    indigo) ISO=ubuntu-14.04.4-desktop-amd64.iso;;
     *) echo "[ERROR] Unsupported ROSDISTRO $ROSDISTRO"; exit;;
 esac
 REV=`echo ${ISO} | sed "s/ubuntu-\([0-9]*.[0-9]*\).*/\\1/"`
@@ -188,6 +188,9 @@ rm -fr /etc/resolv.conf
 apt-get -y -q install debconf-utils
 echo "resolvconf resolvconf/linkify-resolvconf boolean true" | debconf-set-selections -
 dpkg-reconfigure -fnoninteractive resolvconf
+
+# For (mainly) LeapMotion
+apt-get -y -q install libgl1-mesa-glx-lts-trusty
 
 fi # ( [ ! ${DEBUG} ] )
 
