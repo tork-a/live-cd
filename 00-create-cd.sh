@@ -58,20 +58,9 @@ umask 022
 
 if [ ! ${DEBUG} ]; then
 whoami
-if [ \`grep universe /etc/apt/sources.list | wc -l\` -eq 0 ]; then
-  echo "
-#
-deb http://archive.ubuntu.com/ubuntu/ \`lsb_release -cs\` main universe
-deb http://security.ubuntu.com/ubuntu/ \`lsb_release -cs\`-security main universe
-deb http://archive.ubuntu.com/ubuntu/ \`lsb_release -cs\`-updates main universe
-#
-deb http://archive.ubuntu.com/ubuntu/ \`lsb_release -cs\` main multiverse
-deb http://security.ubuntu.com/ubuntu/ \`lsb_release -cs\`-security main multiverse
-deb http://archive.ubuntu.com/ubuntu/ \`lsb_release -cs\`-updates main multiverse
-" >> /etc/apt/sources.list;
-fi
+add-apt-repository universe
+add-apt-repository multiverse
 cat /etc/apt/sources.list
-([ -e /etc/apt/sources.list~ ] && rm -f /etc/apt/sources.list~; ls /etc/apt/)
 
 # install ros
 sh -c 'echo "deb http://packages.ros.org/ros/ubuntu \`lsb_release -cs\` main" > /etc/apt/sources.list.d/ros-latest.list'
